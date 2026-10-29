@@ -1,0 +1,16 @@
+{
+  "title": "Hospital chilled- and hot-water networks",
+  "category": "Pipe stress analysis",
+  "client": "Kuwait Ministry of Health",
+  "location": "",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Horizontal chilled- and hot-water stress analysis, and piping stress analysis and supports for about 24 risers, in Caesar II",
+  "images": [
+    "/media/healthcare.webp",
+    "/media/risers.webp"
+  ],
+  "alt": "Hospital chilled and hot water piping stress model and risers",
+  "order": 180,
+  "show_on_home": true
+}

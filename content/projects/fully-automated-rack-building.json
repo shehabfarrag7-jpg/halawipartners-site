@@ -1,0 +1,16 @@
+{
+  "title": "Fully automated rack building",
+  "category": "Steel structures",
+  "client": "LinkMisr International",
+  "location": "Italy",
+  "metric_label": "Weight",
+  "metric_value": "160 tons",
+  "scope": "Automated rack building structural modeling",
+  "images": [
+    "/media/rack-building.webp",
+    "/media/rack-interior.webp"
+  ],
+  "alt": "Automated rack building steel structure under construction in Italy",
+  "order": 30,
+  "show_on_home": false
+}

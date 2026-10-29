@@ -1,0 +1,15 @@
+{
+  "title": "Water-treatment plant",
+  "category": "Piping and equipment",
+  "client": "EGEC",
+  "location": "",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Water-treatment-plant piping and pumping-system design to ASME B31.3: 3D modeling and initial MTO",
+  "images": [
+    "/media/water.webp"
+  ],
+  "alt": "Water-treatment plant piping and pumping skid model",
+  "order": 150,
+  "show_on_home": false
+}

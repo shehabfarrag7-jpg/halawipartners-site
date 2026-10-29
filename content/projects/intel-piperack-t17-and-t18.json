@@ -1,0 +1,15 @@
+{
+  "title": "Intel PipeRack (T17 and T18)",
+  "category": "Steel structures",
+  "client": "Sami Najami Engineering & Projects",
+  "location": "",
+  "metric_label": "Weight",
+  "metric_value": "516 tons",
+  "scope": "Pipe-rack structural modeling and detailing",
+  "images": [
+    "/media/intel-t17.webp"
+  ],
+  "alt": "Intel pipe rack T17 and T18 steel structure during erection",
+  "order": 10,
+  "show_on_home": true
+}

@@ -1,0 +1,11 @@
+[build]
+  command = "python3 build.py"
+  publish = "public"
+
+[build.environment]
+  PYTHON_VERSION = "3.12"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"

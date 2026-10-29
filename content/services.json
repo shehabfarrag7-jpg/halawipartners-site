@@ -1,0 +1,165 @@
+{
+  "services": [
+    {
+      "name": "Steel detailing",
+      "slug": "steel-detailing",
+      "image": "/media/steel-connection.webp",
+      "alt": "Bolted steel beam-to-column connection",
+      "summary": "Shop and erection drawings, anchor rod plans, material lists and CNC files for US fabricators, in Tekla Structures.",
+      "intro": "Our main focus: complete structural and miscellaneous steel packages for US fabricators, detailed to AISC, RCSC, AWS D1.1, OSHA Subpart R and your shop standards.",
+      "items": [
+        "Anchor rod and embed plans",
+        "Erection plans, elevations and details",
+        "Shop, assembly and single-part drawings",
+        "Material lists, CNC (DSTV/NC1) and DXF files",
+        "Independent check of every sheet before release"
+      ],
+      "codes": [
+        "AISC 360-22",
+        "AISC 303-22",
+        "RCSC",
+        "AWS D1.1",
+        "OSHA Subpart R"
+      ],
+      "link_url": "/steel-detailing/",
+      "link_label": "Steel detailing for US fabricators"
+    },
+    {
+      "name": "Structural engineering",
+      "slug": "structural",
+      "image": "/media/structure-frame.webp",
+      "alt": "Steel structure model",
+      "summary": "Steel and concrete structures modeled, analyzed and designed to code, then detailed for construction.",
+      "intro": "Steel and concrete structures, modeled, analyzed and designed to the governing codes, then detailed for construction.",
+      "items": [
+        "Structural modeling and analysis",
+        "Code design of members and connections",
+        "Detailed design models with connections",
+        "Clash-free rebar modeling",
+        "Shop drawings and bending schedules"
+      ],
+      "codes": [],
+      "link_url": "",
+      "link_label": ""
+    },
+    {
+      "name": "Piping engineering",
+      "slug": "piping",
+      "image": "/media/pumping.webp",
+      "alt": "Pump station piping model",
+      "summary": "Plant layouts, 3D piping models, isometrics, specifications and pipe supports to ASME B31.",
+      "intro": "Plant and piping design to ASME B31.1, B31.3, B31.4 and B31.8, from the plot plan to the isometrics.",
+      "items": [
+        "3D plant and piping modeling",
+        "Plant and piping layouts, with isometrics extracted from the model",
+        "Piping material specifications and pipe-support design",
+        "Material requisitions, technical bid evaluations and vendor drawing review",
+        "Field engineering support and construction assistance"
+      ],
+      "codes": [
+        "ASME B31.1",
+        "ASME B31.3",
+        "ASME B31.4",
+        "ASME B31.8"
+      ],
+      "link_url": "",
+      "link_label": ""
+    },
+    {
+      "name": "Pipe stress analysis",
+      "slug": "stress",
+      "image": "/media/acktech.webp",
+      "alt": "Caesar II stress model of a pump station",
+      "summary": "Static and dynamic stress analysis in Caesar II, with reports, support layouts and nozzle loads.",
+      "intro": "Static and dynamic stress analysis in Caesar II, with reports the field team can use.",
+      "items": [
+        "Model development, load cases and combinations",
+        "Stresses, displacements and support reactions",
+        "Reports with assumptions, methodology and model snapshots",
+        "Support and anchor layouts, nozzle and foundation loads"
+      ],
+      "codes": [
+        "Caesar II"
+      ],
+      "link_url": "",
+      "link_label": ""
+    },
+    {
+      "name": "Static equipment",
+      "slug": "equipment",
+      "image": "/media/sopc.webp",
+      "alt": "Boiler package model",
+      "summary": "Pressure vessels, boilers and storage tanks to ASME VIII, ASME I and API 650/620.",
+      "intro": "Pressure vessels, boilers and storage tanks, designed and drawn for fabrication.",
+      "items": [
+        "Three-phase separators, heater treaters, scrubbers and gas strippers to ASME Section VIII",
+        "Power boilers to ASME Section I",
+        "Horizontal and vertical tanks to API 650, API 620 and BS 2594",
+        "Data sheets, GA and fabrication drawings, nozzle orientations and material requisitions",
+        "Technical bid evaluation and vendor-document review"
+      ],
+      "codes": [
+        "ASME VIII",
+        "ASME I",
+        "API 650",
+        "API 620",
+        "BS 2594"
+      ],
+      "link_url": "",
+      "link_label": ""
+    },
+    {
+      "name": "BIM coordination",
+      "slug": "bim",
+      "image": "/media/bim-building.webp",
+      "alt": "Coordinated multidisciplinary BIM model of a building",
+      "summary": "Architecture, structure and MEP in coordinated models, with clashes found on screen, not on site.",
+      "intro": "Architecture, structure and MEP in coordinated models, with clashes found on screen instead of on site.",
+      "items": [
+        "Model and detail each discipline",
+        "Detect clashes and report issues",
+        "Track issues until they are fixed",
+        "Work from updated linked models",
+        "Model coordination, document management and field collaboration"
+      ],
+      "codes": [],
+      "link_url": "",
+      "link_label": ""
+    },
+    {
+      "name": "Architectural design",
+      "slug": "architectural",
+      "image": "/media/office-warehouse.webp",
+      "alt": "3D model of an office and warehouse building",
+      "summary": "Design for commercial, residential and industrial buildings, coordinated with structure and MEP from the start.",
+      "intro": "Architectural design for commercial, residential and industrial buildings, led from our Sidon office and coordinated with the structural and MEP work from the start.",
+      "items": [
+        "Concept and design development",
+        "Plans, sections and elevations",
+        "Construction drawings and details",
+        "3D building models shared with the structural and MEP teams"
+      ],
+      "codes": [],
+      "link_url": "",
+      "link_label": ""
+    },
+    {
+      "name": "MEP design",
+      "slug": "mep",
+      "image": "/media/healthcare.webp",
+      "alt": "Chilled and hot water piping model in a hospital building",
+      "summary": "Mechanical, electrical and plumbing design, fire-fighting networks, and chilled- and hot-water systems.",
+      "intro": "Mechanical, electrical and plumbing design for buildings and plants, modeled with the architecture and structure so services fit before they are built.",
+      "items": [
+        "HVAC, plumbing and drainage design",
+        "Electrical design coordinated in the building model",
+        "Fire-water and foam-system P&IDs, network layouts and hydraulic calculations",
+        "Chilled- and hot-water piping, with stress analysis and supports",
+        "MEP coordination and clash detection in BIM"
+      ],
+      "codes": [],
+      "link_url": "",
+      "link_label": ""
+    }
+  ]
+}

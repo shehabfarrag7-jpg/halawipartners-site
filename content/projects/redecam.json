@@ -1,0 +1,16 @@
+{
+  "title": "Redecam",
+  "category": "Steel structures",
+  "client": "Redecam",
+  "location": "Brazil",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Industrial steel structure modeling and detailing",
+  "images": [
+    "/media/redecam.webp",
+    "/media/redecam-2.webp"
+  ],
+  "alt": "Tekla model of Redecam industrial steel structures",
+  "order": 70,
+  "show_on_home": false
+}

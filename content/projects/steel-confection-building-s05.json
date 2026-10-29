@@ -1,0 +1,15 @@
+{
+  "title": "Steel Confection Building S05",
+  "category": "Steel structures",
+  "client": "Arm Steel",
+  "location": "Saudi Arabia",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Steel building structural modeling and detailing",
+  "images": [
+    "/media/steel-confection.webp"
+  ],
+  "alt": "Tekla model of Steel Confection Building S05",
+  "order": 80,
+  "show_on_home": false
+}

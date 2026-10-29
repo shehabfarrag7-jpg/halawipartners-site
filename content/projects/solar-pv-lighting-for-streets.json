@@ -1,0 +1,15 @@
+{
+  "title": "Solar PV lighting for streets",
+  "category": "Steel structures",
+  "client": "UNOPS",
+  "location": "Bourj Hammoud, Lebanon",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Steel support structure modeling for street lighting",
+  "images": [
+    "/media/solar-pv.webp"
+  ],
+  "alt": "Tekla model of solar PV street lighting support structures",
+  "order": 100,
+  "show_on_home": false
+}

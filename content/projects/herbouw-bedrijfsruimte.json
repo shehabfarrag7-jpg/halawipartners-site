@@ -1,0 +1,15 @@
+{
+  "title": "Herbouw Bedrijfsruimte",
+  "category": "Steel structures",
+  "client": "Bouwburo Rood-Hart",
+  "location": "Benningbroek, Netherlands",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Industrial building structural modeling",
+  "images": [
+    "/media/herbouw.webp"
+  ],
+  "alt": "Tekla model of the Herbouw Bedrijfsruimte industrial building",
+  "order": 90,
+  "show_on_home": false
+}

@@ -1,0 +1,114 @@
+# Halawi & Partners content manager (Decap CMS)
+# Sign in at https://halawipartners.com/admin with GitHub.
+# Every save commits to the repository, and Netlify rebuilds the site in about a minute.
+
+backend:
+  name: github
+  repo: shehabfarrag7-jpg/halawipartners-site
+  branch: main
+  base_url: https://api.netlify.com
+  site_domain: halawipartners.netlify.app
+
+site_url: https://halawipartners.com
+display_url: https://halawipartners.com
+logo_url: /assets/brand/logo-navy-128.png
+
+media_folder: media
+public_folder: /media
+
+collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    description: Every project on the Projects page. Up to three marked "Show on home page" also appear on the home page.
+    folder: content/projects
+    create: true
+    delete: true
+    format: json
+    extension: json
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{title}} | {{category}}"
+    sortable_fields: [order, title, category]
+    fields:
+      - { label: Project name, name: title, widget: string }
+      - { label: Category, name: category, widget: select, options: ["Steel structures", "Piping and equipment", "Pipe stress analysis"] }
+      - { label: Client, name: client, widget: string, required: false }
+      - { label: Location, name: location, widget: string, required: false, hint: "For example Texas, USA" }
+      - { label: Figure label, name: metric_label, widget: string, required: false, hint: "For example Weight or Capacity. Leave empty if there is no figure." }
+      - { label: Figure value, name: metric_value, widget: string, required: false, hint: "For example 516 tons" }
+      - { label: Scope, name: scope, widget: text, hint: "One or two sentences on what we did" }
+      - label: Images
+        name: images
+        widget: list
+        min: 1
+        max: 2
+        hint: "One or two images. They are shown whole, never cropped. Large photos are resized automatically."
+        field: { label: Image, name: image, widget: image, choose_url: false }
+      - { label: Image description, name: alt, widget: string, hint: "What the image shows. Google and screen readers use it." }
+      - { label: Order, name: order, widget: number, value_type: int, default: 500, hint: "Lower numbers show first within the category" }
+      - { label: Show on home page, name: show_on_home, widget: boolean, default: false, hint: "The home page shows up to three projects" }
+
+  - name: content
+    label: Site content
+    files:
+      - label: Services
+        name: services
+        file: content/services.json
+        format: json
+        description: The disciplines on the home page and the Services page, in the order shown.
+        fields:
+          - label: Services
+            name: services
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Page anchor, name: slug, widget: string, hint: "Short lowercase name used in links, for example piping. Don't change it on an existing service." }
+              - { label: Image, name: image, widget: image, choose_url: false }
+              - { label: Image description, name: alt, widget: string }
+              - { label: Summary (home page), name: summary, widget: text }
+              - { label: Introduction (Services page), name: intro, widget: text }
+              - { label: What we do, name: items, widget: list, field: { label: Item, name: item, widget: string } }
+              - { label: Codes and software, name: codes, widget: list, required: false, field: { label: Code, name: code, widget: string } }
+              - { label: Link to a page, name: link_url, widget: string, required: false, hint: "Optional, for example /steel-detailing/" }
+              - { label: Link text, name: link_label, widget: string, required: false }
+
+      - label: Home page and contact details
+        name: settings
+        file: content/settings.json
+        format: json
+        fields:
+          - { label: Home page headline, name: hero_title, widget: string }
+          - { label: Home page introduction, name: hero_lede, widget: text }
+          - { label: Countries we have worked in, name: countries, widget: string, hint: "Written as a sentence, for example the United States, Italy and Egypt" }
+          - { label: Cairo partner name, name: cairo_name, widget: string }
+          - { label: Cairo partner title, name: cairo_role, widget: string }
+          - { label: Cairo email, name: cairo_email, widget: string }
+          - { label: Cairo phone, name: cairo_phone, widget: string }
+          - { label: Sidon partner name, name: sidon_name, widget: string }
+          - { label: Sidon partner title, name: sidon_role, widget: string }
+          - { label: Sidon email, name: sidon_email, widget: string }
+          - { label: Sidon phone, name: sidon_phone, widget: string }
+          - { label: Company LinkedIn page, name: linkedin_company, widget: string }
+          - { label: CEO LinkedIn profile, name: linkedin_ceo, widget: string }
+
+      - label: Clients
+        name: clients
+        file: content/clients.json
+        format: json
+        fields:
+          - { label: Clients, name: clients, widget: list, field: { label: Client, name: client, widget: string } }
+
+      - label: Steel detailing questions
+        name: faq
+        file: content/faq.json
+        format: json
+        fields:
+          - label: Questions
+            name: faq
+            widget: list
+            summary: "{{fields.question}}"
+            fields:
+              - { label: Question, name: question, widget: string }
+              - { label: Answer, name: answer, widget: text }

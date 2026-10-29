@@ -1,0 +1,16 @@
+{
+  "title": "SOPC boiler package",
+  "category": "Piping and equipment",
+  "client": "SOPC",
+  "location": "",
+  "metric_label": "Capacity",
+  "metric_value": "140 tons per hour",
+  "scope": "Design and modeling of a boiler package with deaerator and six feed-water pumps. Deliverables: 3D modeling, fabrication drawings, BOM, piping works and steel structure",
+  "images": [
+    "/media/sopc.webp",
+    "/media/sopc-site.webp"
+  ],
+  "alt": "SOPC boiler package model and the installed boiler on site",
+  "order": 120,
+  "show_on_home": true
+}

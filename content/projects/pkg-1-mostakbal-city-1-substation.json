@@ -1,0 +1,15 @@
+{
+  "title": "PKG#1 Mostakbal City 1 Substation",
+  "category": "Steel structures",
+  "client": "Kharafi National",
+  "location": "Cairo, Egypt",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "220 kV switching station. Substation steelwork modeling and structural coordination",
+  "images": [
+    "/media/mostakbal.webp"
+  ],
+  "alt": "Steel gantries at Mostakbal City 1 220 kV substation",
+  "order": 40,
+  "show_on_home": false
+}

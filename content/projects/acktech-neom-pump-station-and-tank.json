@@ -1,0 +1,16 @@
+{
+  "title": "ACKTECH–NEOM pump station and tank",
+  "category": "Pipe stress analysis",
+  "client": "ACKTECH–NEOM",
+  "location": "",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Pump-station piping and tank stress-analysis reports in Caesar II, with support, anchor, nozzle and foundation load references",
+  "images": [
+    "/media/acktech.webp",
+    "/media/tank.webp"
+  ],
+  "alt": "Caesar II stress models of a pump station and storage tank",
+  "order": 170,
+  "show_on_home": false
+}

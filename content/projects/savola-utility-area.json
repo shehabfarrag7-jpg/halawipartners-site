@@ -1,0 +1,15 @@
+{
+  "title": "SAVOLA utility area",
+  "category": "Piping and equipment",
+  "client": "SAVOLA–EGEC",
+  "location": "",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Utility-area plant piping and pumping-system design to ASME B31.3: 3D modeling, isometrics, BOM, pipe specifications, line and equipment lists, standard pipe-support drawings",
+  "images": [
+    "/media/savola.webp"
+  ],
+  "alt": "Utility-area plant piping model for SAVOLA",
+  "order": 140,
+  "show_on_home": false
+}

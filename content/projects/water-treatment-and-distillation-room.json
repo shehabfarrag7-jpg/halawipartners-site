@@ -1,0 +1,15 @@
+{
+  "title": "Water-treatment and distillation room",
+  "category": "Piping and equipment",
+  "client": "Dynamics and Coca-Cola Egypt",
+  "location": "",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "3D modeling of the water-treatment and distillation room",
+  "images": [
+    "/media/water-2.webp"
+  ],
+  "alt": "Water-treatment and distillation room model",
+  "order": 160,
+  "show_on_home": false
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Hotel Saint Augustine",
+  "category": "Steel structures",
+  "client": "",
+  "location": "Texas, USA",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Structural modeling and coordination",
+  "images": [
+    "/media/saint-augustine.webp"
+  ],
+  "alt": "Steel frame of Hotel Saint Augustine, Texas",
+  "order": 20,
+  "show_on_home": false
+}

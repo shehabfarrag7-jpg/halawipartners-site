@@ -1,0 +1,15 @@
+{
+  "title": "Proposed office and warehouse development",
+  "category": "Steel structures",
+  "client": "Fila Construction",
+  "location": "Malaga, Australia",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Office and warehouse structural modeling",
+  "images": [
+    "/media/office-warehouse.webp"
+  ],
+  "alt": "Model of a proposed office and warehouse in Malaga, Australia",
+  "order": 110,
+  "show_on_home": false
+}

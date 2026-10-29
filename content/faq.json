@@ -1,0 +1,32 @@
+{
+  "faq": [
+    {
+      "question": "Which software do you detail in?",
+      "answer": "Tekla Structures 2026, with models shared through Trimble Connect when you want to follow progress or review in 3D."
+    },
+    {
+      "question": "Can you work to our shop standards?",
+      "answer": "Yes. Send your Tekla templates, title block, piece-mark scheme, bolt and weld conventions and a sample set. We set them up before the first sheet is drawn."
+    },
+    {
+      "question": "What do you need to quote a job?",
+      "answer": "Contract drawings (PDF or DWG), specifications, any addenda, your shop standards and the schedule you are working to. A scope and a schedule come back with our first questions."
+    },
+    {
+      "question": "How do you handle questions on the contract documents?",
+      "answer": "Questions go out early as written RFIs with sketches and references to the contract drawings. Nothing is guessed, and every answer is tracked into the model."
+    },
+    {
+      "question": "Do you provide CNC and DXF files?",
+      "answer": "Yes. DSTV/NC1 files for saws and drill lines, and DXF files for plate cutting, exported from the same model as the drawings."
+    },
+    {
+      "question": "How are revisions handled?",
+      "answer": "Revisions are clouded and listed in the revision block, and only the affected sheets are re-issued, so your shop can see exactly what changed."
+    },
+    {
+      "question": "Which time zone do you work in?",
+      "answer": "Our offices in Cairo and Sidon are 7 to 10 hours ahead of US time. Markups sent at the end of your day are worked while your shop is closed."
+    }
+  ]
+}

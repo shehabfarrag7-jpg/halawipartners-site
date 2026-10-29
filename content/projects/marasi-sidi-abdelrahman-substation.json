@@ -1,0 +1,15 @@
+{
+  "title": "Marasi Sidi Abdelrahman Substation",
+  "category": "Steel structures",
+  "client": "Kharafi National",
+  "location": "Marsa Matrouh, Egypt",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "220 kV switching station. Substation steelwork modeling and structural coordination",
+  "images": [
+    "/media/marasi.webp"
+  ],
+  "alt": "Steelwork at Marasi Sidi Abdelrahman 220 kV substation",
+  "order": 50,
+  "show_on_home": false
+}

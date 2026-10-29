@@ -1,0 +1,15 @@
+{
+  "title": "Crest-Controls pump station",
+  "category": "Piping and equipment",
+  "client": "Crest-Controls",
+  "location": "",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Pump-station piping stress-analysis report, 3D modeling, piping isometrics, plot plan, MRQ and tank-nozzle orientation",
+  "images": [
+    "/media/crest.webp"
+  ],
+  "alt": "Pump-station piping isometric for Crest-Controls",
+  "order": 130,
+  "show_on_home": false
+}
