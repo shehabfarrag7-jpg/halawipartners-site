@@ -1,5 +1,5 @@
 [build]
-  command = "python3 build.py"
+  command = "python3 build.py && cp -r media public/media"
   publish = "public"
 
 [build.environment]
