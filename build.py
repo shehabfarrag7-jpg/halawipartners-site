@@ -360,9 +360,9 @@ def home():
 </section>
 <section class="band">
   <div class="wrap">
-    <div class="head"><h2>Selected projects</h2><p class="lede">Pipe racks, substations, industrial buildings, boiler packages, plant piping and stress analysis for clients in {COUNTRIES}.</p></div>
+    <div class="head"><h2>Selected projects</h2><p class="lede">A sample of our work, not the full list: pipe racks, substations, industrial buildings, boiler packages, plant piping and stress analysis for clients in {COUNTRIES}.</p></div>
     {row(mix, r)}
-    <p class="more"><a href="projects/">All {len(PROJECTS)} projects</a></p>
+    <p class="more"><a href="projects/">See more of our projects</a></p>
   </div>
 </section>
 <section class="band alt">
@@ -449,7 +449,7 @@ def steel():
 </section>
 <section class="band alt">
   <div class="wrap">
-    <div class="head"><h2>Steel projects</h2><p class="lede">A few of the structures we have modeled and detailed.</p></div>
+    <div class="head"><h2>Steel projects</h2><p class="lede">A few of the structures we have modeled and detailed, out of many more.</p></div>
     {row(STEEL_PROJECTS[:3], r)}
     <p class="more"><a href="../projects/">All projects</a></p>
   </div>
@@ -496,18 +496,18 @@ def services():
 def projects():
     r = '../'
     hero = sheet(f'''<p class="crumbs"><a href="../">Home</a> / Projects</p>
-      <h1>Projects</h1>
-      <p class="lede">{len(PROJECTS)} projects for clients in {COUNTRIES}: steel structures, plant piping and stress analysis.</p>''', compact=True)
+      <h1>Selected projects</h1>
+      <p class="lede">A sample of our work for clients in {COUNTRIES}: steel structures, plant piping and stress analysis. It is a selection, not the full list of projects we have delivered.</p>''', compact=True)
     def group(title, sub, items):
         return f'''<h2 class="group-title">{title} <span>{sub}</span></h2><div class="proj-list">{''.join(proj_block(p, r) for p in items)}</div>'''
     body = f'''{hero}
-<section class="band"><div class="wrap">{group('Steel structures', f'{len(STEEL_PROJECTS)} projects', STEEL_PROJECTS)}</div></section>
-<section class="band alt"><div class="wrap">{group('Piping and equipment', f'{len(PIPING_PROJECTS)} projects', PIPING_PROJECTS)}</div></section>
-<section class="band"><div class="wrap">{group('Pipe stress analysis', f'{len(STRESS_PROJECTS)} projects', STRESS_PROJECTS)}</div></section>
-{cta_band(r)}'''
+<section class="band"><div class="wrap">{group('Steel structures', 'A selection', STEEL_PROJECTS)}</div></section>
+<section class="band alt"><div class="wrap">{group('Piping and equipment', 'A selection', PIPING_PROJECTS)}</div></section>
+<section class="band"><div class="wrap">{group('Pipe stress analysis', 'A selection', STRESS_PROJECTS)}</div></section>
+{cta_band(r, 'More examples on request', 'This page shows a selection of our work. Tell us what you are building and we will send examples and references closer to your project.')}'''
     crumbs_ld = {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [{'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': DOMAIN + '/'}, {'@type': 'ListItem', 'position': 2, 'name': 'Projects', 'item': DOMAIN + '/projects/'}]}
-    return page('projects/', 'Projects: Pipe Racks, Substations, Industrial Steel and Plant Piping | Halawi & Partners',
-                'Steel detailing and engineering projects including a 516-ton Intel pipe rack, 220 kV substations, automated rack buildings, boiler packages and Caesar II stress analysis.',
+    return page('projects/', 'Selected Projects: Pipe Racks, Substations, Industrial Steel and Plant Piping | Halawi & Partners',
+                'A selection of our steel detailing and engineering projects, including a 516-ton Intel pipe rack, 220 kV substations, automated rack buildings, boiler packages and Caesar II stress analysis.',
                 body, r, extra_ld=[crumbs_ld], current='projects/')
 
 def about():
