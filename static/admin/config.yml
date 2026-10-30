@@ -49,6 +49,28 @@ collections:
       - { label: Order, name: order, widget: number, value_type: int, default: 500, hint: "Lower numbers show first within the category" }
       - { label: Show on home page, name: show_on_home, widget: boolean, default: false, hint: "The home page shows up to three projects" }
 
+  - name: insights
+    label: Insights (articles)
+    label_singular: Article
+    description: Articles on the Insights page. The newest three also appear on the home page and the Steel detailing page.
+    folder: content/insights
+    create: true
+    delete: true
+    format: json
+    extension: json
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{date}} | {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Title, name: title, widget: string, hint: "Write it the way a fabricator would search for it" }
+      - { label: Date, name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: Updated on, name: updated, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, required: false, hint: "Only if you change an article later" }
+      - { label: Description for Google, name: description, widget: text, hint: "One or two sentences, about 150 characters. Shown in Google results and under the title." }
+      - { label: Short summary for lists, name: summary, widget: text, required: false, hint: "One sentence shown on the article cards" }
+      - { label: Article, name: body, widget: markdown, buttons: [bold, italic, link, heading-two, heading-three, bulleted-list, numbered-list], editor_components: [] }
+      - { label: Draft, name: draft, widget: boolean, default: false, required: false, hint: "Drafts are not published" }
+
   - name: content
     label: Site content
     files:

@@ -4,5 +4,6 @@ Website of Halawi & Partners, built by `build.py` from the content in `content/`
 
 - Edit content at https://halawipartners.com/admin (sign in with GitHub). Every save rebuilds the site in about a minute.
 - Or edit the JSON files in `content/` directly.
+- Articles live in `content/insights/` (one JSON file each, body in Markdown) and can be added from /admin under "Insights (articles)".
 - Build locally: `pip install -r requirements.txt && python3 build.py`, then open `public/index.html`.
 - Sign-in to the content manager still goes through the Netlify project "halawipartners" (Project configuration, Security, OAuth). Keep that project. Its builds are stopped, so it no longer publishes the site.
