@@ -342,3 +342,13 @@ ul.ticks li::before { content: ""; position: absolute; left: 2px; top: .62em; wi
 
 @media (max-width: 1080px) { .posts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .posts { grid-template-columns: 1fr; } }
+
+/* client logos */
+.logos { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.logos li { background: #fff; border: 1px solid var(--line); height: 120px; display: flex; align-items: center; justify-content: center; padding: 20px 24px; }
+.logos img { width: auto; height: auto; max-width: 100%; max-height: 62px; object-fit: contain; filter: grayscale(1); opacity: .78; transition: filter .2s, opacity .2s; }
+.logos li:hover img { filter: none; opacity: 1; }
+.clients-more { margin: 26px 0 0; max-width: 90ch; color: var(--steel); font-size: 17px; line-height: 1.7; }
+.clients-more span { font: 600 15px/1 var(--cond); letter-spacing: .04em; text-transform: uppercase; color: var(--text); margin-right: 8px; }
+@media (max-width: 1080px) { .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .logos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .logos li { height: 96px; padding: 14px 16px; } .logos img { max-height: 48px; } }

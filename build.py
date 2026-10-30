@@ -262,7 +262,36 @@ def post_list(items, root):
         f'''<li><a href="{root}insights/{a['slug']}/"><span class="when">{nice_date(a['date'])}</span><h3>{e(a['title'])}</h3><p>{e(a['summary'])}</p></a></li>'''
         for a in items) + '</ul>'
 
-CLIENTS = load('clients.json')['clients']
+CLIENTS = []
+for c in load('clients.json')['clients']:
+    c = {'name': c} if isinstance(c, str) else c
+    if c.get('name'):
+        CLIENTS.append({'name': c['name'], 'logo': c.get('logo') or None})
+
+def make_client_logos():
+    """Client logos keep their transparency: 360px-wide WebP files."""
+    out = os.path.join(SITE, 'assets', 'img', 'clients')
+    os.makedirs(out, exist_ok=True)
+    for c in CLIENTS:
+        if not c['logo']:
+            continue
+        path = os.path.join(ROOT, c['logo'].lstrip('/'))
+        if not os.path.exists(path):
+            raise SystemExit(f"Missing client logo: {c['logo']}")
+        im = Image.open(path).convert('RGBA')
+        if im.width > 360:
+            im = im.resize((360, round(im.height * 360 / im.width)), Image.LANCZOS)
+        c['file'] = stem(c['logo']) + '.webp'
+        c['size'] = im.size
+        im.save(os.path.join(out, c['file']), quality=90, method=6)
+
+def clients_block(root):
+    tiles = ''.join(
+        f'''<li><img src="{root}assets/img/clients/{c['file']}" width="{c['size'][0]}" height="{c['size'][1]}" alt="{e(c['name'])}" loading="lazy" decoding="async"></li>'''
+        for c in CLIENTS if c.get('file'))
+    names = [c['name'] for c in CLIENTS if not c.get('file')]
+    more = f'''<p class="clients-more"><span>Also</span> {' · '.join(e(n) for n in names)}</p>''' if names else ''
+    return (f'<ul class="logos">{tiles}</ul>' if tiles else '') + more
 COUNTRIES = SETTINGS['countries']
 FAQ = [(q['question'], q['answer']) for q in load('faq.json')['faq']]
 
@@ -374,7 +403,7 @@ def home():
 <section class="band">
   <div class="wrap">
     <div class="head"><h2>Clients in nine countries</h2><p class="lede">Fabricators, contractors, consultants and owners in {COUNTRIES}.</p></div>
-    <ul class="clients">{''.join(f'<li>{e(c)}</li>' for c in CLIENTS)}</ul>
+    {clients_block(r)}
   </div>
 </section>
 {guides_band(r)}
@@ -540,7 +569,7 @@ def about():
 <section class="band alt">
   <div class="wrap">
     <div class="head"><h2>Clients</h2><p class="lede">Fabricators, contractors and owners in {COUNTRIES}.</p></div>
-    <ul class="clients">{''.join(f'<li>{e(c)}</li>' for c in CLIENTS)}</ul>
+    {clients_block(r)}
   </div>
 </section>
 {cta_band(r)}'''
@@ -677,6 +706,7 @@ if __name__ == '__main__':
     for d in ('steel-detailing', 'services', 'projects', 'insights', 'about', 'contact'):
         os.makedirs(os.path.join(SITE, d), exist_ok=True)
     make_images()
+    make_client_logos()
     for path, fn in PAGES.items():
         with open(os.path.join(SITE, path), 'w', encoding='utf-8') as fh:
             fh.write(fn())

@@ -1,19 +1,54 @@
 {
   "clients": [
-    "Kharafi National",
-    "Sami Najami Engineering & Projects",
-    "LinkMisr International",
-    "Redecam",
-    "UNOPS",
-    "Arm Steel",
-    "Bouwburo Rood-Hart",
-    "Fila Construction",
-    "SOPC",
-    "Crest-Controls",
-    "SAVOLA–EGEC",
-    "EGEC",
-    "Dynamics and Coca-Cola Egypt",
-    "ACKTECH–NEOM",
-    "Kuwait Ministry of Health"
+    {
+      "name": "Kharafi National",
+      "logo": "/media/clients/kharafi-national.png"
+    },
+    {
+      "name": "Sami Najami Engineering & Projects"
+    },
+    {
+      "name": "LinkMisr International",
+      "logo": "/media/clients/linkmisr.png"
+    },
+    {
+      "name": "Redecam",
+      "logo": "/media/clients/redecam.png"
+    },
+    {
+      "name": "UNOPS"
+    },
+    {
+      "name": "Arm Steel"
+    },
+    {
+      "name": "Bouwburo Rood-Hart",
+      "logo": "/media/clients/bouwburo-rood-hart.png"
+    },
+    {
+      "name": "Fila Construction",
+      "logo": "/media/clients/fila-constructions.png"
+    },
+    {
+      "name": "SOPC"
+    },
+    {
+      "name": "Crest-Controls"
+    },
+    {
+      "name": "SAVOLA–EGEC"
+    },
+    {
+      "name": "EGEC"
+    },
+    {
+      "name": "Dynamics and Coca-Cola Egypt"
+    },
+    {
+      "name": "ACKTECH–NEOM"
+    },
+    {
+      "name": "Kuwait Ministry of Health"
+    }
   ]
 }

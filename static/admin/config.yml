@@ -120,7 +120,14 @@ collections:
         file: content/clients.json
         format: json
         fields:
-          - { label: Clients, name: clients, widget: list, field: { label: Client, name: client, widget: string } }
+          - label: Clients
+            name: clients
+            widget: list
+            summary: "{{fields.name}}"
+            hint: "Clients with a logo show as logo tiles; the rest are listed by name underneath."
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Logo, name: logo, widget: image, required: false, choose_url: false, hint: "Optional. PNG or SVG with a transparent background works best." }
 
       - label: Steel detailing questions
         name: faq
