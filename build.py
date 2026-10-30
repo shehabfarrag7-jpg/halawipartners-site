@@ -323,25 +323,27 @@ def facts(p):
     return '<dl class="facts">' + ''.join(f'<dt>{k}</dt><dd>{e(v)}</dd>' for k, v in rows) + '</dl>'
 
 def proj_block(p, root):
-    """One image shown whole; two side by side at equal height; three or more as a large
-    first image with the rest in a row underneath. Images are never cropped."""
+    """Same layout as before: one image, or two side by side. Extra images open in the viewer."""
     pics = p['img']
     def alt(i):
         return p['alt'] if i == 0 else f"{p['alt']} (view {i + 1})"
-    def strip(names, start, sizes):
-        cells = []
-        for i, n in enumerate(names):
-            w, h = dims(n)
-            cells.append(f'<div class="cell" style="--ar:{w/h:.3f}">{img(n, alt(start + i), sizes=sizes, root=root)}</div>')
-        return '<div class="strip">' + ''.join(cells) + '</div>'
-    if len(pics) == 1:
-        imgs = img(pics[0], alt(0), sizes='(max-width: 900px) 100vw, 60vw', root=root)
-    elif len(pics) == 2:
-        imgs = strip(pics, 0, '(max-width: 900px) 50vw, 30vw')
+    ratios = [dims(n)[0] / dims(n)[1] for n in pics[:2]]
+    pair = len(ratios) == 2 and max(ratios) / min(ratios) <= 1.35 and sum(ratios) <= 3.2
+    shown = pics[:2] if pair else pics[:1]
+    if pair:
+        imgs = ''.join(f'<div class="cell" style="--ar:{r:.3f}">{img(n, alt(i), sizes="(max-width: 900px) 50vw, 30vw", root=root)}</div>'
+                       for i, (n, r) in enumerate(zip(shown, ratios)))
     else:
-        imgs = img(pics[0], alt(0), sizes='(max-width: 900px) 100vw, 60vw', root=root) + strip(pics[1:], 1, '(max-width: 900px) 33vw, 20vw')
+        imgs = img(shown[0], alt(0), sizes='(max-width: 900px) 100vw, 60vw', root=root)
+    gallery = []
+    for i, n in enumerate(pics):
+        big = f'{SITE}/assets/img/{n}-1600.webp'
+        src = f'{root}assets/img/{n}-1600.webp' if os.path.exists(big) else f'{root}assets/img/{n}-800.webp'
+        gallery.append({'s': src, 'a': alt(i)})
+    more = (f'<button class="gal-btn" type="button">View all {len(pics)} photos</button>' if len(pics) > len(shown) else '')
+    data = html.escape(json.dumps(gallery, ensure_ascii=False), quote=True)
     return f'''<article class="proj">
-  <div class="pics">{imgs}</div>
+  <div class="pics{' pair' if pair else ''}" data-gallery="{data}">{imgs}{more}</div>
   <div><h3>{e(p['name'])}</h3>{facts(p)}<p>{e(p['scope'])}.</p></div>
 </article>'''
 
@@ -539,6 +541,38 @@ def services():
                 'Steel detailing, structural engineering in steel and concrete, piping design to ASME B31, Caesar II stress analysis, pressure vessels and tanks, BIM coordination, and architectural and MEP design.',
                 body, r, extra_ld=[svc_ld, crumbs_ld], current='services/')
 
+VIEWER = """<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Project photos">
+  <button class="lb-x" type="button" aria-label="Close">Close</button>
+  <button class="lb-nav lb-prev" type="button" aria-label="Previous photo">&#8249;</button>
+  <figure><img alt=""><figcaption><span class="lb-n"></span> <span class="lb-cap"></span></figcaption></figure>
+  <button class="lb-nav lb-next" type="button" aria-label="Next photo">&#8250;</button>
+</div>
+<script>
+(function(){
+  var lb=document.getElementById('lb'); if(!lb) return;
+  var im=lb.querySelector('img'), n=lb.querySelector('.lb-n'), cap=lb.querySelector('.lb-cap'), items=[], i=0, last=null;
+  function show(k){ i=(k+items.length)%items.length; im.src=items[i].s; im.alt=items[i].a; cap.textContent=items[i].a; n.textContent=(i+1)+' / '+items.length;
+    lb.querySelector('.lb-prev').hidden=lb.querySelector('.lb-next').hidden=items.length<2; }
+  function open(list,k,from){ items=list; last=from; show(k); lb.hidden=false; document.body.style.overflow='hidden'; lb.querySelector('.lb-x').focus(); }
+  function close(){ lb.hidden=true; document.body.style.overflow=''; if(last) last.focus(); }
+  document.querySelectorAll('.proj .pics[data-gallery]').forEach(function(box){
+    var list; try{ list=JSON.parse(box.getAttribute('data-gallery')); }catch(e){ return; }
+    box.querySelectorAll('img').forEach(function(img,k){ img.tabIndex=0; img.setAttribute('role','button');
+      img.addEventListener('click',function(){ open(list,k,img); });
+      img.addEventListener('keydown',function(ev){ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); open(list,k,img); } }); });
+    var b=box.querySelector('.gal-btn'); if(b) b.addEventListener('click',function(){ open(list,0,b); });
+  });
+  lb.querySelector('.lb-x').addEventListener('click',close);
+  lb.querySelector('.lb-prev').addEventListener('click',function(){ show(i-1); });
+  lb.querySelector('.lb-next').addEventListener('click',function(){ show(i+1); });
+  lb.addEventListener('click',function(ev){ if(ev.target===lb) close(); });
+  document.addEventListener('keydown',function(ev){ if(lb.hidden) return;
+    if(ev.key==='Escape') close(); else if(ev.key==='ArrowLeft') show(i-1); else if(ev.key==='ArrowRight') show(i+1); });
+  var x0=null; lb.addEventListener('touchstart',function(ev){ x0=ev.touches[0].clientX; },{passive:true});
+  lb.addEventListener('touchend',function(ev){ if(x0===null) return; var dx=ev.changedTouches[0].clientX-x0; if(Math.abs(dx)>40) show(i+(dx<0?1:-1)); x0=null; });
+})();
+</script>"""
+
 def projects():
     r = '../'
     hero = sheet(f'''<p class="crumbs"><a href="../">Home</a> / Projects</p>
@@ -550,6 +584,7 @@ def projects():
 <section class="band"><div class="wrap">{group('Steel structures', 'A selection', STEEL_PROJECTS)}</div></section>
 <section class="band alt"><div class="wrap">{group('Piping and equipment', 'A selection', PIPING_PROJECTS)}</div></section>
 <section class="band"><div class="wrap">{group('Pipe stress analysis', 'A selection', STRESS_PROJECTS)}</div></section>
+{VIEWER}
 {cta_band(r, 'More examples on request', 'This page shows a selection of our work. Tell us what you are building and we will send examples and references closer to your project.')}'''
     crumbs_ld = {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [{'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': DOMAIN + '/'}, {'@type': 'ListItem', 'position': 2, 'name': 'Projects', 'item': DOMAIN + '/projects/'}]}
     return page('projects/', 'Selected Projects: Pipe Racks, Substations, Industrial Steel and Plant Piping | Halawi & Partners',
