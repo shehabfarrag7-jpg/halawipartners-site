@@ -26,6 +26,8 @@ PHONE_S_RAW, PHONE_K_RAW = tel(PHONE_S), tel(PHONE_K)
 NAME_S, NAME_K = SETTINGS['cairo_name'], SETTINGS['sidon_name']
 ROLE_S, ROLE_K = SETTINGS['cairo_role'], SETTINGS['sidon_role']
 YEAR = datetime.date.today().year
+import hashlib
+CSS_V = hashlib.md5(open(os.path.join(ROOT, 'static', 'assets', 'site.css'), 'rb').read()).hexdigest()[:10]
 CF_TOKEN = SETTINGS.get('cloudflare_analytics_token') or ''
 ANALYTICS = (f"""<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{{"token": "{CF_TOKEN}"}}'></script>""" if CF_TOKEN else '')
 
@@ -99,7 +101,7 @@ def page(path, title, desc, body, root, extra_ld=None, current=None, og_type='we
 <link rel="apple-touch-icon" href="{root}assets/brand/apple-touch-icon.png">
 <link rel="preload" href="{root}assets/fonts/source-serif-4-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{root}assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{root}assets/site.css">
+<link rel="stylesheet" href="{root}assets/site.css?v={CSS_V}">
 {ld}
 </head>
 <body>
