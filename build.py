@@ -26,6 +26,8 @@ PHONE_S_RAW, PHONE_K_RAW = tel(PHONE_S), tel(PHONE_K)
 NAME_S, NAME_K = SETTINGS['cairo_name'], SETTINGS['sidon_name']
 ROLE_S, ROLE_K = SETTINGS['cairo_role'], SETTINGS['sidon_role']
 YEAR = datetime.date.today().year
+CF_TOKEN = SETTINGS.get('cloudflare_analytics_token') or ''
+ANALYTICS = (f"""<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{{"token": "{CF_TOKEN}"}}'></script>""" if CF_TOKEN else '')
 
 e = html.escape
 
@@ -116,6 +118,7 @@ def page(path, title, desc, body, root, extra_ld=None, current=None, og_type='we
 <script>
 (function(){{var b=document.querySelector('.menu-btn'),n=document.getElementById('nav');if(!b)return;b.addEventListener('click',function(){{var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'Close':'Menu';}});}})();
 </script>
+{ANALYTICS}
 </body>
 </html>
 '''
