@@ -323,11 +323,25 @@ def facts(p):
     return '<dl class="facts">' + ''.join(f'<dt>{k}</dt><dd>{e(v)}</dd>' for k, v in rows) + '</dl>'
 
 def proj_block(p, root):
+    """One image shown whole; two side by side at equal height; three or more as a large
+    first image with the rest in a row underneath. Images are never cropped."""
     pics = p['img']
-    sz = '(max-width: 900px) 100vw, 60vw' if len(pics) == 1 else '(max-width: 900px) 50vw, 30vw'
-    imgs = ''.join(img(n, p['alt'] if i == 0 else p['alt'] + ' (second view)', sizes=sz, root=root) for i, n in enumerate(pics))
+    def alt(i):
+        return p['alt'] if i == 0 else f"{p['alt']} (view {i + 1})"
+    def strip(names, start, sizes):
+        cells = []
+        for i, n in enumerate(names):
+            w, h = dims(n)
+            cells.append(f'<div class="cell" style="--ar:{w/h:.3f}">{img(n, alt(start + i), sizes=sizes, root=root)}</div>')
+        return '<div class="strip">' + ''.join(cells) + '</div>'
+    if len(pics) == 1:
+        imgs = img(pics[0], alt(0), sizes='(max-width: 900px) 100vw, 60vw', root=root)
+    elif len(pics) == 2:
+        imgs = strip(pics, 0, '(max-width: 900px) 50vw, 30vw')
+    else:
+        imgs = img(pics[0], alt(0), sizes='(max-width: 900px) 100vw, 60vw', root=root) + strip(pics[1:], 1, '(max-width: 900px) 33vw, 20vw')
     return f'''<article class="proj">
-  <div class="pics{' two' if len(pics) > 1 else ''}">{imgs}</div>
+  <div class="pics">{imgs}</div>
   <div><h3>{e(p['name'])}</h3>{facts(p)}<p>{e(p['scope'])}.</p></div>
 </article>'''
 

@@ -352,3 +352,8 @@ ul.ticks li::before { content: ""; position: absolute; left: 2px; top: .62em; wi
 .clients-more span { font: 600 15px/1 var(--cond); letter-spacing: .04em; text-transform: uppercase; color: var(--text); margin-right: 8px; }
 @media (max-width: 1080px) { .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .logos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .logos li { height: 96px; padding: 14px 16px; } .logos img { max-height: 48px; } }
+
+/* projects with several images: equal-height row, nothing cropped */
+.proj .pics .strip { display: flex; gap: 12px; align-items: flex-start; }
+.proj .pics .strip .cell { flex: var(--ar) 1 0%; min-width: 0; }
+.proj .pics > img { max-height: 620px; width: auto; max-width: 100%; }

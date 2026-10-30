@@ -42,8 +42,8 @@ collections:
         name: images
         widget: list
         min: 1
-        max: 2
-        hint: "One or two images. They are shown whole, never cropped. Large photos are resized automatically."
+        max: 6
+        hint: "One to six images; the first is the main one and is also used on the home page. They are shown whole, never cropped. Large photos are resized automatically."
         field: { label: Image, name: image, widget: image, choose_url: false }
       - { label: Image description, name: alt, widget: string, hint: "What the image shows. Google and screen readers use it." }
       - { label: Order, name: order, widget: number, value_type: int, default: 500, hint: "Lower numbers show first within the category" }

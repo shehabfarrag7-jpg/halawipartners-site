@@ -7,9 +7,10 @@
   "metric_value": "",
   "scope": "220 kV switching station. Substation steelwork modeling and structural coordination",
   "images": [
-    "/media/marasi.webp"
+    "/media/marasi-site-1.webp",
+    "/media/marasi-site-2.webp"
   ],
-  "alt": "Steelwork at Marasi Sidi Abdelrahman 220 kV substation",
+  "alt": "Lattice steel gantries and equipment supports at Marasi Sidi Abdelrahman 220 kV substation",
   "order": 50,
   "show_on_home": false
 }

@@ -1,0 +1,16 @@
+{
+  "title": "Tokyo Electron USA Headquarters Stairs",
+  "category": "Steel structures",
+  "client": "",
+  "location": "Texas, USA",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Steel stair and railing modeling and detailing",
+  "images": [
+    "/media/tel-stairs.webp",
+    "/media/tel-stairs-model.webp"
+  ],
+  "alt": "Steel stair with horizontal-bar railings at Tokyo Electron's US headquarters, Texas",
+  "order": 15,
+  "show_on_home": false
+}

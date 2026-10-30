@@ -7,9 +7,12 @@
   "metric_value": "516 tons",
   "scope": "Pipe-rack structural modeling and detailing",
   "images": [
-    "/media/intel-t17.webp"
+    "/media/intel-t17.webp",
+    "/media/intel-t17-model.webp",
+    "/media/intel-t17-site-1.webp",
+    "/media/intel-t17-site-2.webp"
   ],
-  "alt": "Intel pipe rack T17 and T18 steel structure during erection",
+  "alt": "Intel pipe rack T17 and T18: Tekla model and galvanized steel during erection",
   "order": 10,
   "show_on_home": true
 }

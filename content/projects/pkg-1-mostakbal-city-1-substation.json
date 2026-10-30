@@ -7,9 +7,12 @@
   "metric_value": "",
   "scope": "220 kV switching station. Substation steelwork modeling and structural coordination",
   "images": [
-    "/media/mostakbal.webp"
+    "/media/mostakbal-site-3.webp",
+    "/media/mostakbal-site-1.webp",
+    "/media/mostakbal-site-2.webp",
+    "/media/mostakbal-model.webp"
   ],
-  "alt": "Steel gantries at Mostakbal City 1 220 kV substation",
+  "alt": "Lattice steel gantry towers at Mostakbal City 1 substation: 3D model and erection on site",
   "order": 40,
   "show_on_home": false
 }
