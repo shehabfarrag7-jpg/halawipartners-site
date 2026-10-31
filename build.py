@@ -541,7 +541,7 @@ def samples_band(root):
         link = (f'<p class="more"><a class="btn btn-line dl" href="{root}{pdf.lstrip("/")}" download>'
                 f'{e(SAMPLES.get("pdf_label") or "Download the sample set")}<span>PDF, {size}</span></a></p>')
     else:
-        subject = 'Request: full sample drawing set'.replace(' ', '%20').replace(':', '%3A')
+        subject = 'Request: sample drawings'.replace(' ', '%20').replace(':', '%3A')
         link = (f'<p class="more"><a class="btn btn-line dl" href="mailto:{EMAIL_S}?cc={EMAIL_K}&amp;subject={subject}">'
                 f'{e(SAMPLES.get("request_label") or "Request the full sample set")}</a></p>')
     return f'''<section class="band alt" id="samples">
