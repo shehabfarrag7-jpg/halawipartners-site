@@ -1,0 +1,21 @@
+{
+  "title": "Miscellaneous steel: stairs, crossover platform and handrails",
+  "category": "Steel structures",
+  "client": "",
+  "location": "",
+  "metric_label": "",
+  "metric_value": "",
+  "scope": "Shop and erection drawings for stairs, a crossover platform, handrails and grating, detailed in Tekla Structures. Shown as a sample set with project references removed",
+  "images": [
+    "/media/samples/misc-steel-isometric.png",
+    "/media/samples/misc-steel-handrail-grating-layout.png",
+    "/media/samples/misc-steel-erection-sections.png",
+    "/media/samples/misc-steel-stair-shop-drawing.png",
+    "/media/samples/misc-steel-handrail-assembly.png",
+    "/media/samples/misc-steel-frame-sections.png"
+  ],
+  "alt": "Tekla Structures shop and erection drawings for steel stairs, a crossover platform and handrails",
+  "order": 25,
+  "show_on_home": false,
+  "single": true
+}

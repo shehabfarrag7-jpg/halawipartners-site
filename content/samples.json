@@ -1,0 +1,31 @@
+{
+  "title": "Sample shop drawings",
+  "intro": "Miscellaneous steel from one of our packages: stairs, a crossover platform, handrails and grating, detailed in Tekla Structures. Project references have been removed. Open any sheet to see it full size; the complete set is available on request.",
+  "sheets": [
+    {
+      "image": "/media/samples/misc-steel-isometric.png",
+      "caption": "Isometric view: stairs and crossover platform"
+    },
+    {
+      "image": "/media/samples/misc-steel-handrail-grating-layout.png",
+      "caption": "Handrail and grating layout"
+    },
+    {
+      "image": "/media/samples/misc-steel-erection-sections.png",
+      "caption": "Erection sections, bracing and base plate detail"
+    },
+    {
+      "image": "/media/samples/misc-steel-stair-shop-drawing.png",
+      "caption": "Stair shop drawing with stringer cutting details"
+    },
+    {
+      "image": "/media/samples/misc-steel-handrail-assembly.png",
+      "caption": "Handrail assembly drawing"
+    },
+    {
+      "image": "/media/samples/misc-steel-frame-sections.png",
+      "caption": "Frame and stair erection sections"
+    }
+  ],
+  "request_label": "Request the full sample set"
+}

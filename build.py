@@ -240,7 +240,7 @@ for f in sorted(glob.glob(os.path.join(CONTENT, 'projects', '*.json'))):
     PROJECTS.append(dict(name=d['title'], category=d.get('category') or CATEGORIES[0], client=d.get('client') or None,
                          loc=d.get('location') or None, weight=d.get('metric_value') or None, wlabel=d.get('metric_label') or 'Weight',
                          scope=(d.get('scope') or '').rstrip('.'), img=[stem(i) for i in imgs], srcs=imgs, alt=d.get('alt') or d['title'],
-                         order=float(d.get('order') or 999), home=bool(d.get('show_on_home'))))
+                         order=float(d.get('order') or 999), home=bool(d.get('show_on_home')), single=bool(d.get('single'))))
 PROJECTS.sort(key=lambda p: (CATEGORIES.index(p['category']) if p['category'] in CATEGORIES else 99, p['order']))
 STEEL_PROJECTS = [p for p in PROJECTS if p['category'] == 'Steel structures']
 PIPING_PROJECTS = [p for p in PROJECTS if p['category'] == 'Piping and equipment']
@@ -266,6 +266,9 @@ def post_list(items, root):
     return '<ul class="posts">' + ''.join(
         f'''<li><a href="{root}insights/{a['slug']}/"><span class="when">{nice_date(a['date'])}</span><h3>{e(a['title'])}</h3><p>{e(a['summary'])}</p></a></li>'''
         for a in items) + '</ul>'
+
+SAMPLES = load('samples.json') if os.path.exists(os.path.join(CONTENT, 'samples.json')) else {}
+SHEETS = [dict(img=stem(x['image']), src=x['image'], caption=x.get('caption', '')) for x in SAMPLES.get('sheets') or [] if x.get('image')]
 
 CLIENTS = []
 for c in load('clients.json')['clients']:
@@ -304,18 +307,19 @@ def make_images():
     """Create 800px and 1600px WebP versions of every image used on the site."""
     out = os.path.join(SITE, 'assets', 'img')
     os.makedirs(out, exist_ok=True)
-    srcs = {sv['src'] for sv in SERVICES} | {s for p in PROJECTS for s in p['srcs']}
+    srcs = {sv['src'] for sv in SERVICES} | {s for p in PROJECTS for s in p['srcs']} | {x['src'] for x in SHEETS}
     for src in sorted(srcs):
         path = os.path.join(ROOT, src.lstrip('/'))
         if not os.path.exists(path):
             raise SystemExit(f'Missing image: {src}')
         im = ImageOps.exif_transpose(Image.open(path)).convert('RGB')
         name = stem(src)
+        q = 92 if src.lower().endswith('.png') else 80
         for w in (800, 1600):
             if w == 1600 and im.width < 1200:
                 continue
             ww = min(w, im.width)
-            im.resize((ww, round(im.height * ww / im.width)), Image.LANCZOS).save(os.path.join(out, f'{name}-{w}.webp'), quality=80, method=6)
+            im.resize((ww, round(im.height * ww / im.width)), Image.LANCZOS).save(os.path.join(out, f'{name}-{w}.webp'), quality=q, method=6)
 
 def facts(p):
     rows = []
@@ -324,25 +328,29 @@ def facts(p):
     if p.get('weight'): rows.append((p.get('wlabel', 'Weight'), p['weight']))
     return '<dl class="facts">' + ''.join(f'<dt>{k}</dt><dd>{e(v)}</dd>' for k, v in rows) + '</dl>'
 
+def gallery_item(name, src, alt_text, root):
+    big = f'{SITE}/assets/img/{name}-1600.webp'
+    item = {'s': f'{root}assets/img/{name}-1600.webp' if os.path.exists(big) else f'{root}assets/img/{name}-800.webp', 'a': alt_text}
+    orig = os.path.join(ROOT, src.lstrip('/'))
+    if os.path.exists(orig) and Image.open(orig).width > 1700:
+        item['f'] = root + src.lstrip('/')
+    return item
+
 def proj_block(p, root):
     """Same layout as before: one image, or two side by side. Extra images open in the viewer."""
     pics = p['img']
     def alt(i):
         return p['alt'] if i == 0 else f"{p['alt']} (view {i + 1})"
     ratios = [dims(n)[0] / dims(n)[1] for n in pics[:2]]
-    pair = len(ratios) == 2 and max(ratios) / min(ratios) <= 1.35 and sum(ratios) <= 3.2
+    pair = not p.get('single') and len(ratios) == 2 and max(ratios) / min(ratios) <= 1.35 and sum(ratios) <= 3.2
     shown = pics[:2] if pair else pics[:1]
     if pair:
         imgs = ''.join(f'<div class="cell" style="--ar:{r:.3f}">{img(n, alt(i), sizes="(max-width: 900px) 50vw, 30vw", root=root)}</div>'
                        for i, (n, r) in enumerate(zip(shown, ratios)))
     else:
         imgs = img(shown[0], alt(0), sizes='(max-width: 900px) 100vw, 60vw', root=root)
-    gallery = []
-    for i, n in enumerate(pics):
-        big = f'{SITE}/assets/img/{n}-1600.webp'
-        src = f'{root}assets/img/{n}-1600.webp' if os.path.exists(big) else f'{root}assets/img/{n}-800.webp'
-        gallery.append({'s': src, 'a': alt(i)})
-    more = (f'<button class="gal-btn" type="button">View all {len(pics)} photos</button>' if len(pics) > len(shown) else '')
+    gallery = [gallery_item(n, p['srcs'][i], alt(i), root) for i, n in enumerate(pics)]
+    more = (f'<button class="gal-btn" type="button">View all {len(pics)} images</button>' if len(pics) > len(shown) else '')
     data = html.escape(json.dumps(gallery, ensure_ascii=False), quote=True)
     return f'''<article class="proj">
   <div class="pics{' pair' if pair else ''}" data-gallery="{data}">{imgs}{more}</div>
@@ -405,7 +413,7 @@ def home():
       <thead><tr><th scope="col">Series</th><th scope="col">Drawing</th><th scope="col">What it gives your shop</th></tr></thead>
       <tbody>{rows}</tbody>
     </table>
-    <p class="more"><a href="steel-detailing/">How we detail steel for US fabricators</a></p>
+    <p class="more"><a href="steel-detailing/">How we detail steel for US fabricators</a>{'<span class="sep" aria-hidden="true">·</span><a href="steel-detailing/#samples">See sample shop drawings</a>' if SHEETS else ''}</p>
   </div>
 </section>
 <section class="band">
@@ -477,7 +485,8 @@ def steel():
     </div>
   </div>
 </section>
-<section class="band alt">
+{samples_band(r)}
+<section class="band{'' if SHEETS else ' alt'}">
   <div class="wrap split">
     <div>
       <h2>Detailed to US codes and to your shop</h2>
@@ -491,30 +500,57 @@ def steel():
     </div>
   </div>
 </section>
-<section class="band">
+<section class="band{' alt' if SHEETS else ''}">
   <div class="wrap">
     <div class="head"><h2>How a job runs</h2><p class="lede">Every question goes out as a written RFI, every comment is tracked to the model, and every sheet is checked before it leaves the office.</p></div>
     <ol class="steps">{''.join(f'<li><h3>{t}</h3><p>{d}</p></li>' for t, d in STEPS)}</ol>
   </div>
 </section>
-<section class="band alt">
+<section class="band{'' if SHEETS else ' alt'}">
   <div class="wrap">
     <div class="head"><h2>Steel projects</h2><p class="lede">A few of the structures we have modeled and detailed, out of many more.</p></div>
     {row(STEEL_PROJECTS[:3], r)}
     <p class="more"><a href="../projects/">All projects</a></p>
   </div>
 </section>
-<section class="band">
+<section class="band{' alt' if SHEETS else ''}">
   <div class="wrap">
     <div class="head single"><h2>Questions fabricators ask us</h2></div>
     <div class="faq">{faq_html}</div>
   </div>
 </section>
-{guides_band(r)}
+{guides_band(r, alt=not SHEETS)}
+{VIEWER if SHEETS else ''}
 {cta_band(r, *STEEL_CTA)}'''
     return page('steel-detailing/', 'Steel Detailing Services for US Fabricators in Tekla Structures | Halawi & Partners',
                 'Outsourced structural and miscellaneous steel detailing in Tekla Structures: anchor rod plans, erection and shop drawings, CNC files, to AISC 360, AISC 303, RCSC, AWS D1.1 and OSHA Subpart R.',
                 body, r, extra_ld=[svc_ld, faq_ld, crumbs_ld], current='steel-detailing/')
+
+def samples_band(root):
+    if not SHEETS:
+        return ''
+    gallery = [gallery_item(x['img'], x['src'], x['caption'], root) for x in SHEETS]
+    data = html.escape(json.dumps(gallery, ensure_ascii=False), quote=True)
+    tiles = ''.join(f'''<li><figure>{img(x['img'], x['caption'], sizes='(max-width: 640px) 100vw, (max-width: 1080px) 50vw, 33vw', root=root)}<figcaption>{e(x['caption'])}</figcaption></figure></li>''' for x in SHEETS)
+    pdf = SAMPLES.get('pdf') or ''
+    link = ''
+    pdf_path = os.path.join(ROOT, pdf.lstrip('/')) if pdf else ''
+    if pdf and os.path.exists(pdf_path):
+        mb = os.path.getsize(pdf_path) / 1048576
+        size = f'{mb:.1f} MB' if mb >= 0.1 else f'{os.path.getsize(pdf_path) // 1024} KB'
+        link = (f'<p class="more"><a class="btn btn-line dl" href="{root}{pdf.lstrip("/")}" download>'
+                f'{e(SAMPLES.get("pdf_label") or "Download the sample set")}<span>PDF, {size}</span></a></p>')
+    else:
+        subject = 'Request: full sample drawing set'.replace(' ', '%20').replace(':', '%3A')
+        link = (f'<p class="more"><a class="btn btn-line dl" href="mailto:{EMAIL_S}?cc={EMAIL_K}&amp;subject={subject}">'
+                f'{e(SAMPLES.get("request_label") or "Request the full sample set")}</a></p>')
+    return f'''<section class="band alt" id="samples">
+  <div class="wrap">
+    <div class="head"><h2>{e(SAMPLES.get('title') or 'Sample shop drawings')}</h2><p class="lede">{e(SAMPLES.get('intro') or '')}</p></div>
+    <ul class="sheets" data-gallery="{data}">{tiles}</ul>
+    {link}
+  </div>
+</section>'''
 
 def services():
     r = '../'
@@ -543,21 +579,21 @@ def services():
                 'Steel detailing, structural engineering in steel and concrete, piping design to ASME B31, Caesar II stress analysis, pressure vessels and tanks, BIM coordination, and architectural and MEP design.',
                 body, r, extra_ld=[svc_ld, crumbs_ld], current='services/')
 
-VIEWER = """<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Project photos">
+VIEWER = """<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Images">
   <button class="lb-x" type="button" aria-label="Close">Close</button>
-  <button class="lb-nav lb-prev" type="button" aria-label="Previous photo">&#8249;</button>
-  <figure><img alt=""><figcaption><span class="lb-n"></span> <span class="lb-cap"></span></figcaption></figure>
-  <button class="lb-nav lb-next" type="button" aria-label="Next photo">&#8250;</button>
+  <button class="lb-nav lb-prev" type="button" aria-label="Previous image">&#8249;</button>
+  <figure><img alt=""><figcaption><span class="lb-n"></span> <span class="lb-cap"></span> <a class="lb-full" target="_blank" rel="noopener" hidden>Open full size</a></figcaption></figure>
+  <button class="lb-nav lb-next" type="button" aria-label="Next image">&#8250;</button>
 </div>
 <script>
 (function(){
   var lb=document.getElementById('lb'); if(!lb) return;
-  var im=lb.querySelector('img'), n=lb.querySelector('.lb-n'), cap=lb.querySelector('.lb-cap'), items=[], i=0, last=null;
-  function show(k){ i=(k+items.length)%items.length; im.src=items[i].s; im.alt=items[i].a; cap.textContent=items[i].a; n.textContent=(i+1)+' / '+items.length;
+  var im=lb.querySelector('img'), n=lb.querySelector('.lb-n'), cap=lb.querySelector('.lb-cap'), full=lb.querySelector('.lb-full'), items=[], i=0, last=null;
+  function show(k){ i=(k+items.length)%items.length; im.src=items[i].s; im.alt=items[i].a; cap.textContent=items[i].a; n.textContent=(i+1)+' / '+items.length; if(items[i].f){ full.href=items[i].f; full.hidden=false; } else { full.hidden=true; }
     lb.querySelector('.lb-prev').hidden=lb.querySelector('.lb-next').hidden=items.length<2; }
   function open(list,k,from){ items=list; last=from; show(k); lb.hidden=false; document.body.style.overflow='hidden'; lb.querySelector('.lb-x').focus(); }
   function close(){ lb.hidden=true; document.body.style.overflow=''; if(last) last.focus(); }
-  document.querySelectorAll('.proj .pics[data-gallery]').forEach(function(box){
+  document.querySelectorAll('[data-gallery]').forEach(function(box){
     var list; try{ list=JSON.parse(box.getAttribute('data-gallery')); }catch(e){ return; }
     box.querySelectorAll('img').forEach(function(img,k){ img.tabIndex=0; img.setAttribute('role','button');
       img.addEventListener('click',function(){ open(list,k,img); });

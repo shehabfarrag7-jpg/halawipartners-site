@@ -48,6 +48,7 @@ collections:
       - { label: Image description, name: alt, widget: string, hint: "What the image shows. Google and screen readers use it." }
       - { label: Order, name: order, widget: number, value_type: int, default: 500, hint: "Lower numbers show first within the category" }
       - { label: Show on home page, name: show_on_home, widget: boolean, default: false, hint: "The home page shows up to three projects" }
+      - { label: Show only the first image, name: single, widget: boolean, default: false, required: false, hint: "For drawings: the first image is shown large and the rest open from the View all button" }
 
   - name: insights
     label: Insights (articles)
@@ -141,3 +142,22 @@ collections:
             fields:
               - { label: Question, name: question, widget: string }
               - { label: Answer, name: answer, widget: text }
+
+      - label: Sample drawings (Steel detailing page)
+        name: samples
+        file: content/samples.json
+        format: json
+        description: The Sample shop drawings section on the Steel detailing page. Remove all sheets to hide the section.
+        fields:
+          - { label: Heading, name: title, widget: string }
+          - { label: Introduction, name: intro, widget: text }
+          - { label: Sample set (PDF), name: pdf, widget: file, required: false, choose_url: false, hint: "Optional. Leave empty to show a Request button instead of a download" }
+          - { label: Download button text, name: pdf_label, widget: string, required: false }
+          - { label: Request button text, name: request_label, widget: string, required: false }
+          - label: Sheets
+            name: sheets
+            widget: list
+            summary: "{{fields.caption}}"
+            fields:
+              - { label: Sheet image, name: image, widget: image, choose_url: false, hint: "PNG of the drawing, about 3000 px wide so it can be read full size" }
+              - { label: Caption, name: caption, widget: string }

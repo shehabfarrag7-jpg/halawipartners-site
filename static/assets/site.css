@@ -371,3 +371,19 @@ ul.ticks li::before { content: ""; position: absolute; left: 2px; top: .62em; wi
 @media (max-width: 640px) { .lb { padding: 56px 8px 24px; } .lb-nav { width: 40px; height: 56px; font-size: 36px; } .lb-prev { left: 4px; } .lb-next { right: 4px; } }
 .proj .pics.pair { display: flex; gap: 12px; align-items: flex-start; }
 .proj .pics.pair .cell { flex: var(--ar) 1 0%; min-width: 0; }
+
+/* sample shop drawings */
+.sheets { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 24px; }
+.sheets figure { margin: 0; }
+.sheets img { width: 100%; height: auto; background: #fff; border: 1px solid var(--line); cursor: zoom-in; transition: border-color .15s, box-shadow .15s; }
+.sheets img:hover, .sheets img:focus-visible { border-color: var(--text); box-shadow: 0 6px 18px rgba(10,31,61,.12); }
+.sheets figcaption { margin-top: 10px; font: 500 16px/1.4 var(--sans); color: var(--steel); }
+.btn.dl { color: var(--text); gap: 12px; }
+.btn.dl span { font: 500 14px/1 var(--cond); letter-spacing: .04em; color: var(--steel); }
+.btn.dl:hover { background: var(--text); color: #fff; }
+.btn.dl:hover span { color: #D3E0F2; }
+.more .sep { margin: 0 12px; color: var(--steel); }
+.lb-full { margin-left: 10px; color: #F3B488; font: 600 15px var(--sans); white-space: nowrap; }
+.lb-full:hover { color: #fff; }
+@media (max-width: 1080px) { .sheets { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .sheets { grid-template-columns: 1fr; } }
