@@ -861,8 +861,17 @@ def apply_band(cls, steps, mail):
     var total=0; [].slice.call(f.querySelectorAll('input[type=file]')).forEach(function(i){{ if(i.files[0]) total+=i.files[0].size; }});
     if(total>10*1024*1024){{ s.textContent='The files are larger than 10 MB in total. Send a smaller PDF, or email them to {CAREERS_EMAIL}.'; return; }}
     btn.disabled=true; btn.textContent='Sending...'; s.textContent='Uploading your application. This can take a few seconds.';
-    fetch(f.action,{{ method:'POST', headers:{{ 'Accept':'application/json' }}, body:new FormData(f) }})
-      .then(function(r){{ if(!r.ok) throw new Error('HTTP '+r.status); window.location.href='/careers/thanks/'; }})
+    function readFile(input){{ return new Promise(function(res,rej){{ var file=input && input.files[0]; if(!file) return res(null);
+      var rd=new FileReader(); rd.onload=function(){{ res({{ name:file.name, type:file.type, data:String(rd.result).split(',')[1] }}); }}; rd.onerror=function(){{ rej(rd.error); }}; rd.readAsDataURL(file); }}); }}
+    var v=function(n){{ var el=f.elements[n]; return el ? String(el.value).trim() : ''; }};
+    Promise.all([readFile(f.elements['CV']), readFile(f.elements['Work samples'])])
+      .then(function(files){{
+        var payload={{ name:v('Name'), email:v('email'), phone:v('Phone'), location:v('Location'), field:v('Field'), experience:v('Experience'),
+          us:v('US projects'), linkedin:v('LinkedIn'), message:v('Message'), consent:f.elements['Consent'].checked ? 'Yes' : '', _gotcha:v('_gotcha'), cv:files[0], samples:files[1] }};
+        return fetch(f.action,{{ method:'POST', body:JSON.stringify(payload) }});
+      }})
+      .then(function(r){{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }})
+      .then(function(res){{ if(!res || !res.ok) throw new Error((res && res.error) || 'Not saved'); window.location.href='/careers/thanks/'; }})
       .catch(function(){{ btn.disabled=false; btn.textContent='Send application';
         s.innerHTML='Your application could not be sent. Please try again, or email your CV to <a href="mailto:{CAREERS_EMAIL}?subject=Open%20application">{CAREERS_EMAIL}</a>.'; }});
   }});
