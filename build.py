@@ -795,29 +795,114 @@ def article(a):
     return page(f'insights/{a["slug"]}/', f'{a["title"]} | Halawi & Partners', a['desc'], body, r,
                 extra_ld=[post_ld, crumbs_ld], current='insights/', og_type='article')
 
+CAREER_FIELDS = [
+    ('Steel and structures', ['Steel detailing (Tekla Structures)', 'Detailing checker', 'Structural design: steel', 'Structural design: concrete']),
+    ('Plant and piping', ['Piping design', 'Pipe stress analysis (Caesar II)', 'Static equipment: vessels and tanks']),
+    ('Buildings', ['Architectural design', 'Mechanical (HVAC) design', 'Electrical design', 'Plumbing and fire fighting design']),
+    ('BIM and drafting', ['BIM modeling and coordination', 'Drafting (AutoCAD)']),
+    ('Other', ['Other discipline']),
+]
+CAREER_YEARS = ['Fresh graduate', 'Less than 2 years', '2 to 5 years', '5 to 10 years', 'More than 10 years']
+
+def apply_band(cls, steps, mail):
+    if JOBS:
+        notice = 'We are hiring for the roles listed above. Choose one in the form, or send an open application.'
+        role_opts = '<optgroup label="Open roles">' + ''.join(f'<option>{e(j["title"])}</option>' for j in JOBS) + '</optgroup>'
+    else:
+        notice = 'There are no open roles at the moment, but you can still apply. We keep every application on file and contact you when a role that fits opens.'
+        role_opts = ''
+    fields = ''.join(f'<optgroup label="{e(g)}">' + ''.join(f'<option>{e(o)}</option>' for o in opts) + '</optgroup>' for g, opts in CAREER_FIELDS)
+    years = ''.join(f'<option>{e(y)}</option>' for y in CAREER_YEARS)
+    steps_html = ''.join(f'<li><h3>{t}</h3><p>{d}</p></li>' for t, d in steps)
+    return f'''<section class="{cls}" id="apply">
+  <div class="wrap">
+    <div class="head"><h2>Apply</h2><p class="lede">Fill in the form and attach your CV. It comes straight to the partners.</p></div>
+    <div class="apply">
+      <div>
+        <p class="notice" role="note"><strong>{'Open roles' if JOBS else 'No open roles right now'}</strong>{notice}</p>
+        <form class="form" id="apply-form" action="https://formsubmit.co/{CAREERS_EMAIL}" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="_subject" value="New application from the website">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="{DOMAIN}/careers/thanks/">
+          <input type="hidden" name="_autoresponse" value="Thank you for applying to Halawi &amp; Partners. We have received your application and CV. We read every application and will contact you when there is a role that fits.">
+          <div class="hp" aria-hidden="true"><label for="a-hp">Leave this empty</label><input id="a-hp" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
+          <div><label for="a-name">Full name</label><input id="a-name" name="Name" autocomplete="name" required data-name="your name"></div>
+          <div><label for="a-email">Email</label><input id="a-email" name="email" type="email" autocomplete="email" required data-name="your email"></div>
+          <div><label for="a-phone">Phone (optional)</label><input id="a-phone" name="Phone" type="tel" autocomplete="tel"></div>
+          <div><label for="a-city">Where are you based?</label><input id="a-city" name="Location" autocomplete="address-level2" placeholder="City, country"></div>
+          <div><label for="a-field">Discipline</label><select id="a-field" name="Field" required data-name="your discipline"><option value="" disabled selected>Choose your discipline</option>{role_opts}{fields}</select></div>
+          <div><label for="a-years">Years of experience</label><select id="a-years" name="Experience" required data-name="years of experience"><option value="" disabled selected>Choose</option>{years}</select></div>
+          <div><label for="a-us">Experience with US codes (AISC, ASME)</label><select id="a-us" name="US projects"><option>No</option><option>Yes</option></select></div>
+          <div><label for="a-li">LinkedIn profile (optional)</label><input id="a-li" name="LinkedIn" type="url" placeholder="https://www.linkedin.com/in/your-name"></div>
+          <div><label for="a-cv">Attach your CV</label><input id="a-cv" name="CV" type="file" accept=".pdf,.doc,.docx" required data-name="your CV"><p class="hint">PDF or Word</p></div>
+          <div><label for="a-samples">Work samples (optional)</label><input id="a-samples" name="Work samples" type="file" accept=".pdf,.jpg,.jpeg,.png"><p class="hint">One PDF or image, client names removed</p></div>
+          <div class="full"><label for="a-msg">Anything else we should know? (optional)</label><textarea id="a-msg" name="Message"></textarea></div>
+          <div class="full check"><input id="a-ok" type="checkbox" name="Consent" value="Agreed to keep the application on file" required data-name="the agreement box"><label for="a-ok">I agree that Halawi &amp; Partners keeps my application on file for current and future roles.</label></div>
+          <div class="full"><button class="btn btn-markup" type="submit">Send application</button><p class="hint">Files up to 10 MB in total.</p><p class="form-status" role="status" aria-live="polite"></p></div>
+        </form>
+      </div>
+      <aside>
+        <h3 style="margin-bottom:14px">What happens next</h3>
+        <ol class="steps-list">{steps_html}</ol>
+        <p class="note" style="margin-top:22px">Trouble with the form? Email your CV to <a href="{mail('Open application')}">{CAREERS_EMAIL}</a>.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+<script>
+(function(){{
+  var f=document.getElementById('apply-form'); if(!f) return;
+  var s=f.querySelector('.form-status'), btn=f.querySelector('button[type=submit]'), field=f.elements['Field'];
+  document.querySelectorAll('a[data-role]').forEach(function(a){{ a.addEventListener('click',function(){{ field.value=a.getAttribute('data-role'); }}); }});
+  f.addEventListener('submit',function(ev){{
+    var miss=[].slice.call(f.querySelectorAll('[required]')).filter(function(x){{ return x.type==='checkbox' ? !x.checked : !x.value.trim(); }});
+    var em=f.elements['email'];
+    if(!miss.length && !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(em.value.trim())){{ ev.preventDefault(); s.textContent='Enter an email address like name@company.com.'; em.focus(); return; }}
+    if(miss.length){{ ev.preventDefault(); s.textContent='Please add '+miss.map(function(x){{ return x.getAttribute('data-name'); }}).join(', ')+'.'; miss[0].focus(); return; }}
+    var total=0; [].slice.call(f.querySelectorAll('input[type=file]')).forEach(function(i){{ if(i.files[0]) total+=i.files[0].size; }});
+    if(total>10*1024*1024){{ ev.preventDefault(); s.textContent='The files are larger than 10 MB in total. Send a smaller PDF, or email them to {CAREERS_EMAIL}.'; return; }}
+    f.elements['_subject'].value='Application: '+field.value+', '+f.elements['Experience'].value+' ('+f.elements['Name'].value.trim()+')';
+    btn.disabled=true; btn.textContent='Sending...'; s.textContent='Uploading your application. This can take a few seconds.';
+  }});
+  window.addEventListener('pageshow',function(){{ btn.disabled=false; btn.textContent='Send application'; }});
+}})();
+</script>'''
+
+def careers_thanks():
+    body = sheet('''<p class="crumbs"><a href="/">Home</a> / <a href="/careers/">Careers</a></p>
+      <h1>Application received</h1>
+      <p class="lede">Thank you for applying. Your application and CV are with the partners. We read every application and will contact you when there is a role that fits.</p>
+      <div class="hero-actions"><a class="btn btn-markup" href="/projects/">See our projects</a><a class="btn btn-line" href="/">Home page</a></div>''', compact=True)
+    return page('careers/thanks/', 'Application received | Halawi & Partners', 'Thank you for applying to Halawi & Partners.', body, '/', current=None).replace(
+        '<link rel="canonical" href="https://halawipartners.com/careers/thanks/">', '<meta name="robots" content="noindex">')
+
 def careers():
     r = '../'
     def mail(subject):
         return f"mailto:{CAREERS_EMAIL}?subject=" + subject.replace(' ', '%20').replace(':', '%3A').replace('(', '%28').replace(')', '%29')
     hero = sheet(f'''<p class="crumbs"><a href="../">Home</a> / Careers</p>
       <h1>Careers</h1>
-      <p class="lede">We detail steel for fabricators in the United States and engineer structures, plant piping and buildings across the Middle East and Europe. We are always glad to hear from engineers who care about getting every detail right.</p>
-      <div class="hero-actions"><a class="btn btn-markup" href="{mail('Open application')}">Send your CV</a></div>''', compact=True)
+      <p class="lede">Our Cairo office covers almost every engineering discipline: steel detailing for fabricators in the United States, structural, piping and equipment design, and architectural and MEP design for projects across the Middle East and Europe. We are always glad to hear from engineers who care about getting every detail right.</p>
+      <div class="hero-actions"><a class="btn btn-markup" href="#apply">Apply now</a></div>''', compact=True)
     work = [
         'Steel detailing for US fabricators in Tekla Structures, to AISC, RCSC, AWS D1.1 and OSHA Subpart R',
-        'Every sheet is checked by a second engineer, so you learn from every comment',
-        'Pipe racks, substations, industrial buildings, stairs and handrails, plant piping and buildings',
-        'Training for engineers new to US detailing standards',
+        'Structural, piping, equipment, architectural and MEP work on the same projects, so you see how the disciplines fit together',
+        'Every sheet and calculation is checked by a second engineer, so you learn from every comment',
+        'Pipe racks, substations, industrial buildings, plants, hospitals and commercial buildings',
+        'Training for engineers new to US standards',
         'A team in Cairo working directly with the partners',
     ]
     fields = [
         ('Steel detailing', 'Modelers, detailers and checkers in Tekla Structures, junior to senior'),
-        ('Structural engineering', 'Steel and concrete design and connection checks'),
-        ('Piping and stress analysis', 'Plant piping to ASME B31 and analysis in Caesar II'),
-        ('BIM, architectural and MEP', 'Coordination models, architectural design and MEP design'),
+        ('Structural design', 'Steel and concrete structures and connection design'),
+        ('Piping and equipment', 'Plant piping to ASME B31, stress analysis in Caesar II, vessels and tanks'),
+        ('Architectural design', 'Concept to construction drawings for buildings'),
+        ('MEP design', 'Mechanical, electrical, plumbing and fire fighting'),
+        ('BIM and drafting', 'Coordination models, clash detection and drafting'),
     ]
     steps = [
-        ('Send your CV', 'Add a few samples of your work: drawings or model screenshots, with client names removed.'),
+        ('Apply with the form', 'Attach your CV and, if you can, a few samples of your work with client names removed.'),
         ('We review it', 'Every application is read by an engineer, not filtered by keywords.'),
         ('Technical test', 'If there is a fit, a short practical test in the software you work with.'),
         ('Interview', 'A conversation with the partners about your work and the projects ahead.'),
@@ -832,7 +917,7 @@ def careers():
         <div class="job-head"><h3>{e(j['title'])}</h3><p class="job-meta">{e(meta)}</p></div>
         {f'<p>{e(j["summary"])}</p>' if j['summary'] else ''}
         {f'<details><summary>Full description</summary><div class="prose">{j["body"]}</div></details>' if j['body'] else ''}
-        <p><a class="btn btn-line" href="{mail('Application: ' + j['title'])}">Apply for this role</a></p>
+        <p><a class="btn btn-line" href="#apply" data-role="{e(j['title'])}">Apply for this role</a></p>
       </article>''')
             city = j['location'].split(',')[0].strip()
             jobs_ld.append({'@context': 'https://schema.org', '@type': 'JobPosting', 'title': j['title'],
@@ -860,26 +945,16 @@ def careers():
 </section>
 <section class="{b2}">
   <div class="wrap">
-    <div class="head"><h2>Open applications</h2><p class="lede">We don't always have a role posted, but we keep good CVs on file and come back to them when a project starts. We welcome engineers in:</p></div>
+    <div class="head"><h2>Open applications</h2><p class="lede">We don't always have a role posted, but we keep good CVs on file and come back to them when a project starts. We welcome engineers in every discipline we work in:</p></div>
     <div class="disc fields">{''.join(f'<article><h3>{t}</h3><p>{d}</p></article>' for t, d in fields)}</div>
-    <p class="note" style="margin-top:28px">Written English matters: RFIs and comments go straight to clients in the United States.</p>
+    <p class="note" style="margin-top:28px">Written English matters: questions and comments go straight to clients in the United States, Europe and the Gulf.</p>
   </div>
 </section>
-<section class="{b3}">
-  <div class="wrap">
-    <div class="head"><h2>How to apply</h2><p class="lede">Email your CV to <a href="{mail('Open application')}">{CAREERS_EMAIL}</a> and tell us which field you work in.</p></div>
-    <ol class="steps four">{''.join(f'<li><h3>{t}</h3><p>{d}</p></li>' for t, d in steps)}</ol>
-  </div>
-</section>
-<section class="band ink">
-  <div class="wrap cta">
-    <div><h2>Send us your CV</h2><p class="lede" style="margin-top:14px">Our engineering office is in Cairo, Egypt. Include samples of your work and the field you want to work in.</p></div>
-    <div class="acts"><a class="btn btn-markup" href="{mail('Open application')}">Email your CV</a></div>
-  </div>
-</section>'''
+{apply_band(b3, steps, mail)}
+'''
     crumbs_ld = {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [{'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': DOMAIN + '/'}, {'@type': 'ListItem', 'position': 2, 'name': 'Careers', 'item': DOMAIN + '/careers/'}]}
-    return page('careers/', 'Careers: Steel Detailing and Engineering Jobs in Cairo | Halawi & Partners',
-                'Work on US steel detailing and engineering projects in Tekla Structures from our Cairo office. Open applications for detailers, checkers, structural, piping, BIM and MEP engineers.',
+    return page('careers/', 'Careers: Engineering and Steel Detailing Jobs in Cairo | Halawi & Partners',
+                'Engineering jobs in Cairo across almost every discipline: steel detailing in Tekla Structures, structural, piping and equipment, architectural, MEP and BIM. Apply online with your CV.',
                 body, r, extra_ld=[crumbs_ld] + jobs_ld, current=None)
 
 def notfound():
@@ -890,13 +965,13 @@ def notfound():
 
 PAGES = {'index.html': home, 'steel-detailing/index.html': steel, 'services/index.html': services,
          'projects/index.html': projects, 'insights/index.html': insights_index, 'about/index.html': about,
-         'contact/index.html': contact, 'careers/index.html': careers, '404.html': notfound}
+         'contact/index.html': contact, 'careers/index.html': careers, 'careers/thanks/index.html': careers_thanks, '404.html': notfound}
 
 if __name__ == '__main__':
     if os.path.exists(SITE):
         shutil.rmtree(SITE)
     shutil.copytree(os.path.join(ROOT, 'static'), SITE)
-    for d in ('steel-detailing', 'services', 'projects', 'insights', 'about', 'contact', 'careers'):
+    for d in ('steel-detailing', 'services', 'projects', 'insights', 'about', 'contact', 'careers', 'careers/thanks'):
         os.makedirs(os.path.join(SITE, d), exist_ok=True)
     make_images()
     make_client_logos()
