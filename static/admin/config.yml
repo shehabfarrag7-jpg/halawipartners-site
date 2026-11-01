@@ -137,7 +137,8 @@ collections:
           - { label: Sidon phone, name: sidon_phone, widget: string }
           - { label: Company LinkedIn page, name: linkedin_company, widget: string }
           - { label: CEO LinkedIn profile, name: linkedin_ceo, widget: string }
-          - { label: Careers email, name: careers_email, widget: string, required: false, hint: "Applications from the Careers page are sent here" }
+          - { label: Careers email, name: careers_email, widget: string, required: false, hint: "Shown on the Careers page for people who prefer to email their CV" }
+          - { label: Careers form endpoint (Basin), name: careers_form_endpoint, widget: string, required: false, hint: "The Basin form link that receives applications. Leave as it is." }
           - { label: Cloudflare Web Analytics token, name: cloudflare_analytics_token, widget: string, required: false, hint: "Visitor statistics. Leave as it is." }
 
       - label: Clients

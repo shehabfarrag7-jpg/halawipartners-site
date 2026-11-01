@@ -271,6 +271,7 @@ SAMPLES = load('samples.json') if os.path.exists(os.path.join(CONTENT, 'samples.
 SHEETS = [dict(img=stem(x['image']), src=x['image'], caption=x.get('caption', '')) for x in SAMPLES.get('sheets') or [] if x.get('image')]
 
 CAREERS_EMAIL = SETTINGS.get('careers_email') or EMAIL_S
+CAREERS_FORM = SETTINGS.get('careers_form_endpoint') or ''
 JOBS = []
 for f in sorted(glob.glob(os.path.join(CONTENT, 'jobs', '*.json'))):
     with open(f, encoding='utf-8') as fh:
@@ -820,13 +821,8 @@ def apply_band(cls, steps, mail):
     <div class="apply">
       <div>
         <p class="notice" role="note"><strong>{'Open roles' if JOBS else 'No open roles right now'}</strong>{notice}</p>
-        <form class="form" id="apply-form" action="https://formsubmit.co/{CAREERS_EMAIL}" method="POST" enctype="multipart/form-data">
-          <input type="hidden" name="_subject" value="New application from the website">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" value="{DOMAIN}/careers/thanks/">
-          <input type="hidden" name="_autoresponse" value="Thank you for applying to Halawi &amp; Partners. We have received your application and CV. We read every application and will contact you when there is a role that fits.">
-          <div class="hp" aria-hidden="true"><label for="a-hp">Leave this empty</label><input id="a-hp" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <form class="form" id="apply-form" action="{CAREERS_FORM}" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+          <div class="hp" aria-hidden="true"><label for="a-hp">Leave this empty</label><input id="a-hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
           <div><label for="a-name">Full name</label><input id="a-name" name="Name" autocomplete="name" required data-name="your name"></div>
           <div><label for="a-email">Email</label><input id="a-email" name="email" type="email" autocomplete="email" required data-name="your email"></div>
           <div><label for="a-phone">Phone (optional)</label><input id="a-phone" name="Phone" type="tel" autocomplete="tel"></div>
@@ -839,7 +835,7 @@ def apply_band(cls, steps, mail):
           <div><label for="a-samples">Work samples (optional)</label><input id="a-samples" name="Work samples" type="file" accept=".pdf,.jpg,.jpeg,.png"><p class="hint">One PDF or image, client names removed</p></div>
           <div class="full"><label for="a-msg">Anything else we should know? (optional)</label><textarea id="a-msg" name="Message"></textarea></div>
           <div class="full check"><input id="a-ok" type="checkbox" name="Consent" value="Agreed to keep the application on file" required data-name="the agreement box"><label for="a-ok">I agree that Halawi &amp; Partners keeps my application on file for current and future roles.</label></div>
-          <div class="full"><button class="btn btn-markup" type="submit">Send application</button><p class="hint">Files up to 10 MB in total.</p><p class="form-status" role="status" aria-live="polite"></p></div>
+          <div class="full"><button class="btn btn-markup" type="submit">Send application</button><p class="hint">Files up to 10 MB in total. Your details are used only to consider you for roles at Halawi &amp; Partners.</p><p class="form-status" role="status" aria-live="polite"></p></div>
         </form>
       </div>
       <aside>
@@ -856,14 +852,19 @@ def apply_band(cls, steps, mail):
   var s=f.querySelector('.form-status'), btn=f.querySelector('button[type=submit]'), field=f.elements['Field'];
   document.querySelectorAll('a[data-role]').forEach(function(a){{ a.addEventListener('click',function(){{ field.value=a.getAttribute('data-role'); }}); }});
   f.addEventListener('submit',function(ev){{
+    ev.preventDefault();
+    if(f.elements['_gotcha'].value) return;
     var miss=[].slice.call(f.querySelectorAll('[required]')).filter(function(x){{ return x.type==='checkbox' ? !x.checked : !x.value.trim(); }});
     var em=f.elements['email'];
-    if(!miss.length && !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(em.value.trim())){{ ev.preventDefault(); s.textContent='Enter an email address like name@company.com.'; em.focus(); return; }}
-    if(miss.length){{ ev.preventDefault(); s.textContent='Please add '+miss.map(function(x){{ return x.getAttribute('data-name'); }}).join(', ')+'.'; miss[0].focus(); return; }}
+    if(!miss.length && !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(em.value.trim())){{ s.textContent='Enter an email address like name@company.com.'; em.focus(); return; }}
+    if(miss.length){{ s.textContent='Please add '+miss.map(function(x){{ return x.getAttribute('data-name'); }}).join(', ')+'.'; miss[0].focus(); return; }}
     var total=0; [].slice.call(f.querySelectorAll('input[type=file]')).forEach(function(i){{ if(i.files[0]) total+=i.files[0].size; }});
-    if(total>10*1024*1024){{ ev.preventDefault(); s.textContent='The files are larger than 10 MB in total. Send a smaller PDF, or email them to {CAREERS_EMAIL}.'; return; }}
-    f.elements['_subject'].value='Application: '+field.value+', '+f.elements['Experience'].value+' ('+f.elements['Name'].value.trim()+')';
+    if(total>10*1024*1024){{ s.textContent='The files are larger than 10 MB in total. Send a smaller PDF, or email them to {CAREERS_EMAIL}.'; return; }}
     btn.disabled=true; btn.textContent='Sending...'; s.textContent='Uploading your application. This can take a few seconds.';
+    fetch(f.action,{{ method:'POST', headers:{{ 'Accept':'application/json' }}, body:new FormData(f) }})
+      .then(function(r){{ if(!r.ok) throw new Error('HTTP '+r.status); window.location.href='/careers/thanks/'; }})
+      .catch(function(){{ btn.disabled=false; btn.textContent='Send application';
+        s.innerHTML='Your application could not be sent. Please try again, or email your CV to <a href="mailto:{CAREERS_EMAIL}?subject=Open%20application">{CAREERS_EMAIL}</a>.'; }});
   }});
   window.addEventListener('pageshow',function(){{ btn.disabled=false; btn.textContent='Send application'; }});
 }})();
