@@ -72,6 +72,28 @@ collections:
       - { label: Article, name: body, widget: markdown, buttons: [bold, italic, link, heading-two, heading-three, bulleted-list, numbered-list], editor_components: [] }
       - { label: Draft, name: draft, widget: boolean, default: false, required: false, hint: "Drafts are not published" }
 
+  - name: jobs
+    label: Careers (open roles)
+    label_singular: Open role
+    description: Open roles on the Careers page. With no roles, the page invites open applications. Each role is also listed on Google Jobs.
+    folder: content/jobs
+    create: true
+    delete: true
+    format: json
+    extension: json
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{title}} | {{experience}}"
+    fields:
+      - { label: Job title, name: title, widget: string, hint: "For example Steel Detailer (Tekla Structures)" }
+      - { label: Experience, name: experience, widget: string, hint: "For example 3+ years in US steel detailing" }
+      - { label: Employment type, name: employment_type, widget: select, options: [FULL_TIME, PART_TIME, CONTRACTOR, INTERN], default: FULL_TIME }
+      - { label: Location, name: location, widget: string, default: "Cairo, Egypt" }
+      - { label: Short summary, name: summary, widget: text }
+      - { label: Full description, name: description, widget: markdown, buttons: [bold, link, heading-three, bulleted-list, numbered-list], editor_components: [] }
+      - { label: Date posted, name: date_posted, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: Open until, name: valid_through, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, hint: "After this date the role is hidden automatically" }
+
   - name: content
     label: Site content
     files:
@@ -115,6 +137,8 @@ collections:
           - { label: Sidon phone, name: sidon_phone, widget: string }
           - { label: Company LinkedIn page, name: linkedin_company, widget: string }
           - { label: CEO LinkedIn profile, name: linkedin_ceo, widget: string }
+          - { label: Careers email, name: careers_email, widget: string, required: false, hint: "Applications from the Careers page are sent here" }
+          - { label: Cloudflare Web Analytics token, name: cloudflare_analytics_token, widget: string, required: false, hint: "Visitor statistics. Leave as it is." }
 
       - label: Clients
         name: clients

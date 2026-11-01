@@ -143,7 +143,7 @@ def footer(root):
       </div>
       <div>
         <h2>Pages</h2>
-        <ul><li><a href="{root}steel-detailing/">Steel detailing</a></li><li><a href="{root}services/">Services</a></li><li><a href="{root}projects/">Projects</a></li><li><a href="{root}insights/">Insights</a></li><li><a href="{root}about/">About</a></li><li><a href="{root}contact/">Contact</a></li><li><a href="{LI_CO}" rel="noopener">LinkedIn</a></li></ul>
+        <ul><li><a href="{root}steel-detailing/">Steel detailing</a></li><li><a href="{root}services/">Services</a></li><li><a href="{root}projects/">Projects</a></li><li><a href="{root}insights/">Insights</a></li><li><a href="{root}about/">About</a></li><li><a href="{root}contact/">Contact</a></li><li><a href="{root}careers/">Careers</a></li><li><a href="{LI_CO}" rel="noopener">LinkedIn</a></li></ul>
       </div>
     </div>
     <div class="legal"><span>© {YEAR} Halawi &amp; Partners</span><span>Sidon, Lebanon and Cairo, Egypt</span></div>
@@ -269,6 +269,22 @@ def post_list(items, root):
 
 SAMPLES = load('samples.json') if os.path.exists(os.path.join(CONTENT, 'samples.json')) else {}
 SHEETS = [dict(img=stem(x['image']), src=x['image'], caption=x.get('caption', '')) for x in SAMPLES.get('sheets') or [] if x.get('image')]
+
+CAREERS_EMAIL = SETTINGS.get('careers_email') or EMAIL_S
+JOBS = []
+for f in sorted(glob.glob(os.path.join(CONTENT, 'jobs', '*.json'))):
+    with open(f, encoding='utf-8') as fh:
+        d = json.load(fh)
+    if not d.get('title'):
+        continue
+    posted = datetime.date.fromisoformat(str(d.get('date_posted') or datetime.date.today().isoformat())[:10])
+    until = datetime.date.fromisoformat(str(d['valid_through'])[:10]) if d.get('valid_through') else posted + datetime.timedelta(days=60)
+    if until < datetime.date.today():
+        continue
+    JOBS.append(dict(slug=stem(f), title=d['title'], experience=d.get('experience') or '', type=d.get('employment_type') or 'FULL_TIME',
+                     location=d.get('location') or 'Cairo, Egypt', summary=d.get('summary') or '', posted=posted, until=until,
+                     body=markdown.markdown(d.get('description') or '', extensions=['sane_lists'])))
+JOBS.sort(key=lambda j: j['posted'], reverse=True)
 
 CLIENTS = []
 for c in load('clients.json')['clients']:
@@ -779,6 +795,93 @@ def article(a):
     return page(f'insights/{a["slug"]}/', f'{a["title"]} | Halawi & Partners', a['desc'], body, r,
                 extra_ld=[post_ld, crumbs_ld], current='insights/', og_type='article')
 
+def careers():
+    r = '../'
+    def mail(subject):
+        return f"mailto:{CAREERS_EMAIL}?subject=" + subject.replace(' ', '%20').replace(':', '%3A').replace('(', '%28').replace(')', '%29')
+    hero = sheet(f'''<p class="crumbs"><a href="../">Home</a> / Careers</p>
+      <h1>Careers</h1>
+      <p class="lede">We detail steel for fabricators in the United States and engineer structures, plant piping and buildings across the Middle East and Europe. We are always glad to hear from engineers who care about getting every detail right.</p>
+      <div class="hero-actions"><a class="btn btn-markup" href="{mail('Open application')}">Send your CV</a></div>''', compact=True)
+    work = [
+        'Steel detailing for US fabricators in Tekla Structures, to AISC, RCSC, AWS D1.1 and OSHA Subpart R',
+        'Every sheet is checked by a second engineer, so you learn from every comment',
+        'Pipe racks, substations, industrial buildings, stairs and handrails, plant piping and buildings',
+        'Training for engineers new to US detailing standards',
+        'A team in Cairo working directly with the partners',
+    ]
+    fields = [
+        ('Steel detailing', 'Modelers, detailers and checkers in Tekla Structures, junior to senior'),
+        ('Structural engineering', 'Steel and concrete design and connection checks'),
+        ('Piping and stress analysis', 'Plant piping to ASME B31 and analysis in Caesar II'),
+        ('BIM, architectural and MEP', 'Coordination models, architectural design and MEP design'),
+    ]
+    steps = [
+        ('Send your CV', 'Add a few samples of your work: drawings or model screenshots, with client names removed.'),
+        ('We review it', 'Every application is read by an engineer, not filtered by keywords.'),
+        ('Technical test', 'If there is a fit, a short practical test in the software you work with.'),
+        ('Interview', 'A conversation with the partners about your work and the projects ahead.'),
+    ]
+    roles = ''
+    jobs_ld = []
+    if JOBS:
+        items = []
+        for j in JOBS:
+            meta = ' · '.join(x for x in [j['experience'], j['location'], j['type'].replace('_', ' ').title()] if x)
+            items.append(f'''<article class="job" id="{j['slug']}">
+        <div class="job-head"><h3>{e(j['title'])}</h3><p class="job-meta">{e(meta)}</p></div>
+        {f'<p>{e(j["summary"])}</p>' if j['summary'] else ''}
+        {f'<details><summary>Full description</summary><div class="prose">{j["body"]}</div></details>' if j['body'] else ''}
+        <p><a class="btn btn-line" href="{mail('Application: ' + j['title'])}">Apply for this role</a></p>
+      </article>''')
+            city = j['location'].split(',')[0].strip()
+            jobs_ld.append({'@context': 'https://schema.org', '@type': 'JobPosting', 'title': j['title'],
+                            'description': j['body'] or f"<p>{e(j['summary'])}</p>", 'datePosted': j['posted'].isoformat(), 'validThrough': j['until'].isoformat(),
+                            'employmentType': j['type'], 'hiringOrganization': {'@type': 'Organization', 'name': 'Halawi & Partners', 'sameAs': DOMAIN + '/', 'logo': DOMAIN + '/assets/brand/logo-navy-128.png'},
+                            'jobLocation': {'@type': 'Place', 'address': {'@type': 'PostalAddress', 'addressLocality': city, 'addressCountry': 'EG' if 'egypt' in j['location'].lower() else ''}},
+                            'directApply': False, 'url': f'{DOMAIN}/careers/#{j["slug"]}'})
+        roles = f'''<section class="band">
+  <div class="wrap">
+    <div class="head"><h2>Open roles</h2><p class="lede">Roles we are hiring for now. If none fits, an open application is still welcome.</p></div>
+    <div class="jobs">{''.join(items)}</div>
+  </div>
+</section>'''
+    b1, b2, b3 = ('band alt', 'band', 'band alt') if JOBS else ('band', 'band alt', 'band')
+    body = f'''{hero}
+{roles}
+<section class="{b1}">
+  <div class="wrap split">
+    <div>
+      <h2>What the work is like</h2>
+      <p class="lede" style="margin-top:18px">Real projects from the first week, reviewed line by line, for clients who expect US shop standards.</p>
+    </div>
+    <div><ul class="ticks" style="margin-top:6px">{''.join(f'<li>{w}</li>' for w in work)}</ul></div>
+  </div>
+</section>
+<section class="{b2}">
+  <div class="wrap">
+    <div class="head"><h2>Open applications</h2><p class="lede">We don't always have a role posted, but we keep good CVs on file and come back to them when a project starts. We welcome engineers in:</p></div>
+    <div class="disc fields">{''.join(f'<article><h3>{t}</h3><p>{d}</p></article>' for t, d in fields)}</div>
+    <p class="note" style="margin-top:28px">Written English matters: RFIs and comments go straight to clients in the United States.</p>
+  </div>
+</section>
+<section class="{b3}">
+  <div class="wrap">
+    <div class="head"><h2>How to apply</h2><p class="lede">Email your CV to <a href="{mail('Open application')}">{CAREERS_EMAIL}</a> and tell us which field you work in.</p></div>
+    <ol class="steps four">{''.join(f'<li><h3>{t}</h3><p>{d}</p></li>' for t, d in steps)}</ol>
+  </div>
+</section>
+<section class="band ink">
+  <div class="wrap cta">
+    <div><h2>Send us your CV</h2><p class="lede" style="margin-top:14px">Our engineering office is in Cairo, Egypt. Include samples of your work and the field you want to work in.</p></div>
+    <div class="acts"><a class="btn btn-markup" href="{mail('Open application')}">Email your CV</a></div>
+  </div>
+</section>'''
+    crumbs_ld = {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [{'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': DOMAIN + '/'}, {'@type': 'ListItem', 'position': 2, 'name': 'Careers', 'item': DOMAIN + '/careers/'}]}
+    return page('careers/', 'Careers: Steel Detailing and Engineering Jobs in Cairo | Halawi & Partners',
+                'Work on US steel detailing and engineering projects in Tekla Structures from our Cairo office. Open applications for detailers, checkers, structural, piping, BIM and MEP engineers.',
+                body, r, extra_ld=[crumbs_ld] + jobs_ld, current=None)
+
 def notfound():
     body = sheet('''<h1>This sheet isn't in the set</h1>
       <p class="lede">The page you asked for doesn't exist. Go back to the home page or see our projects.</p>
@@ -787,13 +890,13 @@ def notfound():
 
 PAGES = {'index.html': home, 'steel-detailing/index.html': steel, 'services/index.html': services,
          'projects/index.html': projects, 'insights/index.html': insights_index, 'about/index.html': about,
-         'contact/index.html': contact, '404.html': notfound}
+         'contact/index.html': contact, 'careers/index.html': careers, '404.html': notfound}
 
 if __name__ == '__main__':
     if os.path.exists(SITE):
         shutil.rmtree(SITE)
     shutil.copytree(os.path.join(ROOT, 'static'), SITE)
-    for d in ('steel-detailing', 'services', 'projects', 'insights', 'about', 'contact'):
+    for d in ('steel-detailing', 'services', 'projects', 'insights', 'about', 'contact', 'careers'):
         os.makedirs(os.path.join(SITE, d), exist_ok=True)
     make_images()
     make_client_logos()
@@ -805,7 +908,7 @@ if __name__ == '__main__':
         with open(os.path.join(SITE, 'insights', a['slug'], 'index.html'), 'w', encoding='utf-8') as fh:
             fh.write(article(a))
     today = datetime.date.today().isoformat()
-    urls = [(u, today) for u in ['', 'services/', 'steel-detailing/', 'projects/', 'insights/', 'about/', 'contact/']]
+    urls = [(u, today) for u in ['', 'services/', 'steel-detailing/', 'projects/', 'insights/', 'about/', 'contact/', 'careers/']]
     urls += [(f'insights/{a["slug"]}/', a['updated'].isoformat()) for a in INSIGHTS]
     pri = {'': '1.0', 'services/': '0.9', 'steel-detailing/': '0.9'}
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
