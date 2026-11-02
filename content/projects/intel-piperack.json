@@ -9,7 +9,7 @@
   "images": [
     "/media/intel-piperack.webp"
   ],
-  "alt": "Tekla model of an Intel pipe rack",
+  "alt": "3D model of an Intel pipe rack",
   "order": 60,
   "show_on_home": false
 }

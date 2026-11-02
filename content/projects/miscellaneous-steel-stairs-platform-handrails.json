@@ -5,7 +5,7 @@
   "location": "",
   "metric_label": "",
   "metric_value": "",
-  "scope": "Shop and erection drawings for stairs, a crossover platform, handrails and grating, detailed in Tekla Structures. Shown as a sample with project references removed; samples of other types of projects are available on request",
+  "scope": "Shop and erection drawings for stairs, a crossover platform, handrails and grating. Shown as a sample with project references removed; samples of other types of projects are available on request",
   "images": [
     "/media/samples/misc-steel-isometric.png",
     "/media/samples/misc-steel-handrail-grating-layout.png",
@@ -14,7 +14,7 @@
     "/media/samples/misc-steel-handrail-assembly.png",
     "/media/samples/misc-steel-frame-sections.png"
   ],
-  "alt": "Tekla Structures shop and erection drawings for steel stairs, a crossover platform and handrails",
+  "alt": "Shop and erection drawings for steel stairs, a crossover platform and handrails",
   "order": 25,
   "show_on_home": false,
   "single": true

@@ -73,7 +73,7 @@ ORG = {
         {'@type': 'Person', 'name': NAME_K, 'jobTitle': ROLE_K, 'email': EMAIL_K, 'telephone': PHONE_K_RAW},
         {'@type': 'Person', 'name': NAME_S.replace('Eng. ', ''), 'jobTitle': ROLE_S, 'email': EMAIL_S, 'telephone': PHONE_S_RAW, 'sameAs': [LI_SF]},
     ],
-    'knowsAbout': ['Steel detailing', 'Shop drawings', 'Erection drawings', 'Tekla Structures', 'AISC 360', 'AISC 303 Code of Standard Practice', 'OSHA 1926 Subpart R', 'Structural engineering', 'Piping design', 'Pipe stress analysis', 'Caesar II', 'Static equipment design', 'Pressure vessel design', 'BIM coordination', 'Architectural design', 'MEP design', 'Fire-fighting systems'],
+    'knowsAbout': ['Steel detailing', 'Shop drawings', 'Erection drawings', '3D steel modeling', 'AISC 360', 'AISC 303 Code of Standard Practice', 'OSHA 1926 Subpart R', 'Structural engineering', 'Piping design', 'Pipe stress analysis', 'Caesar II', 'Static equipment design', 'Pressure vessel design', 'BIM coordination', 'Architectural design', 'MEP design', 'Fire-fighting systems'],
 }
 
 def page(path, title, desc, body, root, extra_ld=None, current=None, og_type='website'):
@@ -184,7 +184,7 @@ DELIVERABLES = [
 STEPS = [
     ('Send the documents', 'Contract drawings, specifications and your shop standards.'),
     ('Scope and RFIs', 'We review the set, agree scope and schedule, and send written RFIs.'),
-    ('Model', 'The structure is modeled in Tekla Structures with every connection.'),
+    ('Model', 'The structure is modeled in 3D with every connection.'),
     ('Check', 'A second engineer checks the model and every sheet.'),
     ('Approval', 'Drawings go out for approval and come back with comments.'),
     ('Release', 'Revisions are clouded and drawings released with CNC files.'),
@@ -226,7 +226,7 @@ EXPORTS = [
     'Model review in Trimble Connect',
 ]
 
-CODES = ['AISC 360-22', 'AISC 303-22', 'RCSC', 'AWS D1.1', 'OSHA 1926 Subpart R', 'Tekla Structures 2026', 'Trimble Connect']
+CODES = ['AISC 360-22', 'AISC 303-22', 'RCSC', 'AWS D1.1', 'OSHA 1926 Subpart R', 'Trimble Connect']
 
 CATEGORIES = ['Steel structures', 'Piping and equipment', 'Pipe stress analysis']
 PROJECTS = []
@@ -249,6 +249,9 @@ HOME_PROJECTS = sorted([p for p in PROJECTS if p['home']], key=lambda p: p['orde
 
 def nice_date(d):
     return f'{d.strftime("%B")} {d.day}, {d.year}'
+
+# Old addresses that now redirect to a new page.
+MOVED = {'insights/tekla-detailing-deliverables/': 'insights/steel-detailing-deliverables/'}
 
 INSIGHTS = []
 for f in glob.glob(os.path.join(CONTENT, 'insights', '*.json')):
@@ -455,7 +458,7 @@ def home():
 {guides_band(r)}
 {cta_band(r)}"""
     return page('', 'Halawi & Partners | Steel Detailing and Engineering Services for US Fabricators',
-                'Outsourced steel detailing in Tekla Structures for US fabricators, to AISC and OSHA Subpart R, plus structural, piping, BIM and MEP engineering services.',
+                'Outsourced steel detailing for US fabricators, to AISC and OSHA Subpart R, plus structural, piping, BIM and MEP engineering services.',
                 body, r, current=None)
 
 def guides_band(root, alt=True, heading='Guides for US fabricators', limit=3):
@@ -473,7 +476,7 @@ def steel():
     r = '../'
     hero = sheet(f'''<p class="crumbs"><a href="../">Home</a> / Steel detailing</p>
       <h1>Steel detailing services for US fabricators</h1>
-      <p class="lede">Outsource your structural and miscellaneous steel detailing: complete packages in Tekla Structures, from the anchor rod plan to the CNC files, drawn to your shop standards and checked before release.</p>
+      <p class="lede">Outsource your structural and miscellaneous steel detailing: complete packages from a full 3D model, from the anchor rod plan to the CNC files, drawn to your shop standards and checked before release.</p>
       <div class="hero-actions"><a class="btn btn-markup" href="../contact/">Send drawings for a quote</a></div>''', compact=True)
     rows = ''.join(f'<tr><td class="mark"><span>{m}</span></td><td><strong>{t}</strong></td><td class="what">{w}</td></tr>' for m, t, w in DELIVERABLES)
     codes = ''.join(f'<li>{c}</li>' for c in CODES)
@@ -481,7 +484,7 @@ def steel():
     faq_html = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in faqs)
     faq_ld = {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in faqs]}
     svc_ld = {'@context': 'https://schema.org', '@type': 'Service', 'serviceType': 'Structural steel detailing', 'provider': {'@id': DOMAIN + '/#org'}, 'areaServed': 'United States',
-              'description': 'Anchor rod plans, erection drawings, shop and assembly drawings, single-part drawings, material lists and CNC files in Tekla Structures, detailed to AISC 360-22, AISC 303-22, RCSC, AWS D1.1 and OSHA 1926 Subpart R.'}
+              'description': 'Anchor rod plans, erection drawings, shop and assembly drawings, single-part drawings, material lists and CNC files, detailed to AISC 360-22, AISC 303-22, RCSC, AWS D1.1 and OSHA 1926 Subpart R.'}
     crumbs_ld = {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [{'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': DOMAIN + '/'}, {'@type': 'ListItem', 'position': 2, 'name': 'Steel detailing', 'item': DOMAIN + '/steel-detailing/'}]}
     checks = [
         'Model checking and clash detection before any drawing is produced',
@@ -507,7 +510,7 @@ def steel():
   <div class="wrap split">
     <div>
       <h2>Detailed to US codes and to your shop</h2>
-      <p class="lede" style="margin-top:18px">We detail to the contract documents and the codes they reference, and to the way your shop works: your Tekla templates, title block, piece marks, bolt conventions and preferred connections.</p>
+      <p class="lede" style="margin-top:18px">We detail to the contract documents and the codes they reference, and to the way your shop works: your drawing templates, title block, piece marks, bolt conventions and preferred connections.</p>
       <ul class="codes" style="margin-top:26px">{codes}</ul>
     </div>
     <div>
@@ -539,8 +542,8 @@ def steel():
 {guides_band(r, alt=not SHEETS)}
 {VIEWER if SHEETS else ''}
 {cta_band(r, *STEEL_CTA)}'''
-    return page('steel-detailing/', 'Steel Detailing Services for US Fabricators in Tekla Structures | Halawi & Partners',
-                'Outsourced structural and miscellaneous steel detailing in Tekla Structures: anchor rod plans, erection and shop drawings, CNC files, to AISC 360, AISC 303, RCSC, AWS D1.1 and OSHA Subpart R.',
+    return page('steel-detailing/', 'Steel Detailing and Shop Drawings for US Fabricators | Halawi & Partners',
+                'Outsourced structural and miscellaneous steel detailing: anchor rod plans, erection and shop drawings, CNC files, to AISC 360, AISC 303, RCSC, AWS D1.1 and OSHA Subpart R.',
                 body, r, extra_ld=[svc_ld, faq_ld, crumbs_ld], current='steel-detailing/')
 
 def samples_band(root):
@@ -761,7 +764,7 @@ def insights_index():
                'blogPost': [{'@type': 'BlogPosting', 'headline': a['title'], 'url': f'{DOMAIN}/insights/{a["slug"]}/', 'datePublished': a['date'].isoformat()} for a in INSIGHTS]}
     crumbs_ld = {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [{'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': DOMAIN + '/'}, {'@type': 'ListItem', 'position': 2, 'name': 'Insights', 'item': DOMAIN + '/insights/'}]}
     return page('insights/', 'Steel Detailing Insights for US Fabricators | Halawi & Partners',
-                'Practical articles on outsourcing steel detailing, OSHA Subpart R, AISC requirements and Tekla Structures deliverables for US steel fabricators.',
+                'Practical articles on outsourcing steel detailing, OSHA Subpart R, AISC requirements and detailing deliverables for US steel fabricators.',
                 body, r, extra_ld=[list_ld, crumbs_ld], current='insights/')
 
 def article(a):
@@ -797,7 +800,7 @@ def article(a):
                 extra_ld=[post_ld, crumbs_ld], current='insights/', og_type='article')
 
 CAREER_FIELDS = [
-    ('Steel and structures', ['Steel detailing (Tekla Structures)', 'Detailing checker', 'Structural design: steel', 'Structural design: concrete']),
+    ('Steel and structures', ['Steel detailing', 'Detailing checker', 'Structural design: steel', 'Structural design: concrete']),
     ('Plant and piping', ['Piping design', 'Pipe stress analysis (Caesar II)', 'Static equipment: vessels and tanks']),
     ('Buildings', ['Architectural design', 'Mechanical (HVAC) design', 'Electrical design', 'Plumbing and fire fighting design']),
     ('BIM and drafting', ['BIM modeling and coordination', 'Drafting (AutoCAD)']),
@@ -896,7 +899,7 @@ def careers():
       <p class="lede">Our Cairo office covers almost every engineering discipline: steel detailing for fabricators in the United States, structural, piping and equipment design, and architectural and MEP design for projects across the Middle East and Europe. We are always glad to hear from engineers who care about getting every detail right.</p>
       <div class="hero-actions"><a class="btn btn-markup" href="#apply">Apply now</a></div>''', compact=True)
     work = [
-        'Steel detailing for US fabricators in Tekla Structures, to AISC, RCSC, AWS D1.1 and OSHA Subpart R',
+        'Steel detailing for US fabricators, to AISC, RCSC, AWS D1.1 and OSHA Subpart R',
         'Structural, piping, equipment, architectural and MEP work on the same projects, so you see how the disciplines fit together',
         'Every sheet and calculation is checked by a second engineer, so you learn from every comment',
         'Pipe racks, substations, industrial buildings, plants, hospitals and commercial buildings',
@@ -904,7 +907,7 @@ def careers():
         'A team in Cairo working directly with the partners',
     ]
     fields = [
-        ('Steel detailing', 'Modelers, detailers and checkers in Tekla Structures, junior to senior'),
+        ('Steel detailing', 'Modelers, detailers and checkers, junior to senior'),
         ('Structural design', 'Steel and concrete structures and connection design'),
         ('Piping and equipment', 'Plant piping to ASME B31, stress analysis in Caesar II, vessels and tanks'),
         ('Architectural design', 'Concept to construction drawings for buildings'),
@@ -964,7 +967,7 @@ def careers():
 '''
     crumbs_ld = {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [{'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': DOMAIN + '/'}, {'@type': 'ListItem', 'position': 2, 'name': 'Careers', 'item': DOMAIN + '/careers/'}]}
     return page('careers/', 'Careers: Engineering and Steel Detailing Jobs in Cairo | Halawi & Partners',
-                'Engineering jobs in Cairo across almost every discipline: steel detailing in Tekla Structures, structural, piping and equipment, architectural, MEP and BIM. Apply online with your CV.',
+                'Engineering jobs in Cairo across almost every discipline: steel detailing, structural, piping and equipment, architectural, MEP and BIM. Apply online with your CV.',
                 body, r, extra_ld=[crumbs_ld] + jobs_ld, current=None)
 
 def notfound():
@@ -992,6 +995,13 @@ if __name__ == '__main__':
         os.makedirs(os.path.join(SITE, 'insights', a['slug']), exist_ok=True)
         with open(os.path.join(SITE, 'insights', a['slug'], 'index.html'), 'w', encoding='utf-8') as fh:
             fh.write(article(a))
+    for old, new in MOVED.items():
+        os.makedirs(os.path.join(SITE, old), exist_ok=True)
+        with open(os.path.join(SITE, old, 'index.html'), 'w', encoding='utf-8') as fh:
+            fh.write(f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved</title>'
+                     f'<link rel="canonical" href="{DOMAIN}/{new}"><meta name="robots" content="noindex">'
+                     f'<meta http-equiv="refresh" content="0; url=/{new}"></head>'
+                     f'<body><p>This page has moved to <a href="/{new}">{DOMAIN}/{new}</a>.</p></body></html>')
     today = datetime.date.today().isoformat()
     urls = [(u, today) for u in ['', 'services/', 'steel-detailing/', 'projects/', 'insights/', 'about/', 'contact/', 'careers/']]
     urls += [(f'insights/{a["slug"]}/', a['updated'].isoformat()) for a in INSIGHTS]

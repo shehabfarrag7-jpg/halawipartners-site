@@ -85,7 +85,7 @@ collections:
     identifier_field: title
     summary: "{{title}} | {{experience}}"
     fields:
-      - { label: Job title, name: title, widget: string, hint: "For example Steel Detailer (Tekla Structures)" }
+      - { label: Job title, name: title, widget: string, hint: "For example Steel Detailer" }
       - { label: Experience, name: experience, widget: string, hint: "For example 3+ years in US steel detailing" }
       - { label: Employment type, name: employment_type, widget: select, options: [FULL_TIME, PART_TIME, CONTRACTOR, INTERN], default: FULL_TIME }
       - { label: Location, name: location, widget: string, default: "Cairo, Egypt" }
