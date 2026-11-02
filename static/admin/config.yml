@@ -130,7 +130,7 @@ collections:
           - { label: Cairo partner name, name: cairo_name, widget: string }
           - { label: Cairo partner title, name: cairo_role, widget: string }
           - { label: Cairo email, name: cairo_email, widget: string }
-          - { label: Cairo phone, name: cairo_phone, widget: string }
+          - { label: Cairo phone, name: cairo_phone, widget: string, required: false, hint: "Leave empty to hide it on the site" }
           - { label: Sidon partner name, name: sidon_name, widget: string }
           - { label: Sidon partner title, name: sidon_role, widget: string }
           - { label: Sidon email, name: sidon_email, widget: string }

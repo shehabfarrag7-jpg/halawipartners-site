@@ -23,6 +23,9 @@ LI_SF = SETTINGS['linkedin_ceo']
 EMAIL_S, EMAIL_K = SETTINGS['cairo_email'], SETTINGS['sidon_email']
 PHONE_S, PHONE_K = SETTINGS['cairo_phone'], SETTINGS['sidon_phone']
 PHONE_S_RAW, PHONE_K_RAW = tel(PHONE_S), tel(PHONE_K)
+# A phone left empty in the settings is not shown anywhere on the site.
+TEL_S_LI = f'<li><a href="tel:{PHONE_S_RAW}">{PHONE_S}</a></li>' if PHONE_S_RAW else ''
+TEL_S_CONTACT = (f'<br><a href="tel:{PHONE_S_RAW}">{PHONE_S}</a> · <a href="https://wa.me/{PHONE_S_RAW.lstrip("+")}" rel="noopener">WhatsApp</a>') if PHONE_S_RAW else ''
 NAME_S, NAME_K = SETTINGS['cairo_name'], SETTINGS['sidon_name']
 ROLE_S, ROLE_K = SETTINGS['cairo_role'], SETTINGS['sidon_role']
 YEAR = datetime.date.today().year
@@ -61,7 +64,6 @@ ORG = {
     'image': DOMAIN + '/assets/brand/og-image.png',
     'description': 'Multidisciplinary engineering and architectural practice in Sidon, Lebanon and Cairo, Egypt: steel detailing for US fabricators, structural engineering, piping design, pipe stress analysis, static equipment, BIM coordination, and architectural and MEP design.',
     'email': EMAIL_S,
-    'telephone': PHONE_S_RAW,
     'foundingDate': '2023',
     'areaServed': ['United States', 'Middle East', 'Europe'],
     'sameAs': [LI_CO],
@@ -71,7 +73,7 @@ ORG = {
     ],
     'founder': [
         {'@type': 'Person', 'name': NAME_K, 'jobTitle': ROLE_K, 'email': EMAIL_K, 'telephone': PHONE_K_RAW},
-        {'@type': 'Person', 'name': NAME_S.replace('Eng. ', ''), 'jobTitle': ROLE_S, 'email': EMAIL_S, 'telephone': PHONE_S_RAW, 'sameAs': [LI_SF]},
+        {'@type': 'Person', 'name': NAME_S.replace('Eng. ', ''), 'jobTitle': ROLE_S, 'email': EMAIL_S, **({'telephone': PHONE_S_RAW} if PHONE_S_RAW else {}), 'sameAs': [LI_SF]},
     ],
     'knowsAbout': ['Steel detailing', 'Shop drawings', 'Erection drawings', '3D steel modeling', 'AISC 360', 'AISC 303 Code of Standard Practice', 'OSHA 1926 Subpart R', 'Structural engineering', 'Piping design', 'Pipe stress analysis', 'Caesar II', 'Static equipment design', 'Pressure vessel design', 'BIM coordination', 'Architectural design', 'MEP design', 'Fire-fighting systems'],
 }
@@ -139,7 +141,7 @@ def footer(root):
       </div>
       <div>
         <h2>Cairo office</h2>
-        <ul><li>Cairo, Egypt</li><li>{e(NAME_S)}, {e(ROLE_S)}</li><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li><li><a href="tel:{PHONE_S_RAW}">{PHONE_S}</a></li></ul>
+        <ul><li>Cairo, Egypt</li><li>{e(NAME_S)}, {e(ROLE_S)}</li><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li>{TEL_S_LI}</ul>
       </div>
       <div>
         <h2>Pages</h2>
@@ -223,10 +225,10 @@ EXPORTS = [
     'DXF files for plate cutting',
     'Bills of material, cut lists and bolt lists',
     'IFC models for coordination with other trades',
-    'Model review in Trimble Connect',
+    'Online model review while the job is detailed',
 ]
 
-CODES = ['AISC 360-22', 'AISC 303-22', 'RCSC', 'AWS D1.1', 'OSHA 1926 Subpart R', 'Trimble Connect']
+CODES = ['AISC 360-22', 'AISC 303-22', 'RCSC', 'AWS D1.1', 'OSHA 1926 Subpart R']
 
 CATEGORIES = ['Steel structures', 'Piping and equipment', 'Pipe stress analysis']
 PROJECTS = []
@@ -672,7 +674,7 @@ def about():
     <div class="head"><h2>The partners</h2><p class="lede">Write to either partner directly.</p></div>
     <div class="people">
       <div class="person"><h3>{e(NAME_K)}</h3><p class="role">{e(ROLE_K)}, Sidon, Lebanon</p><ul><li><a href="mailto:{EMAIL_K}">{EMAIL_K}</a></li><li><a href="tel:{PHONE_K_RAW}">{PHONE_K}</a></li></ul></div>
-      <div class="person"><h3>{e(NAME_S)}</h3><p class="role">{e(ROLE_S)}, Cairo, Egypt</p><ul><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li><li><a href="tel:{PHONE_S_RAW}">{PHONE_S}</a></li><li><a href="{LI_SF}" rel="noopener">LinkedIn profile</a></li></ul></div>
+      <div class="person"><h3>{e(NAME_S)}</h3><p class="role">{e(ROLE_S)}, Cairo, Egypt</p><ul><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li>{TEL_S_LI}<li><a href="{LI_SF}" rel="noopener">LinkedIn profile</a></li></ul></div>
     </div>
   </div>
 </section>
@@ -720,7 +722,7 @@ def contact():
       <h2 style="font-size:30px">What to send</h2>
       <ul class="ticks" style="margin-top:16px"><li>Contract drawings, PDF or DWG</li><li>Specifications and addenda</li><li>Your shop standards or a sample set</li><li>The schedule you are working to</li></ul>
       <h2 style="font-size:30px;margin-top:36px">Or write directly</h2>
-      <p style="margin-top:12px"><strong>{e(NAME_S)}</strong>, Cairo<br><a href="mailto:{EMAIL_S}">{EMAIL_S}</a><br><a href="tel:{PHONE_S_RAW}">{PHONE_S}</a> · <a href="https://wa.me/{PHONE_S_RAW.lstrip('+')}" rel="noopener">WhatsApp</a></p>
+      <p style="margin-top:12px"><strong>{e(NAME_S)}</strong>, Cairo<br><a href="mailto:{EMAIL_S}">{EMAIL_S}</a>{TEL_S_CONTACT}</p>
       <p><strong>{e(NAME_K)}</strong>, Sidon<br><a href="mailto:{EMAIL_K}">{EMAIL_K}</a><br><a href="tel:{PHONE_K_RAW}">{PHONE_K}</a></p>
       <p><a href="{LI_CO}" rel="noopener">Halawi &amp; Partners on LinkedIn</a></p>
     </div>
