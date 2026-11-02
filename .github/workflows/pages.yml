@@ -26,7 +26,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - run: python build.py && cp -r media public/media
+      # When the site is switched offline (site_offline in content/settings.json), only the holding page is published.
+      - run: python build.py && { [ -f public/.offline ] || cp -r media public/media; }
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:

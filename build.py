@@ -986,9 +986,53 @@ PAGES = {'index.html': home, 'steel-detailing/index.html': steel, 'services/inde
          'projects/index.html': projects, 'insights/index.html': insights_index, 'about/index.html': about,
          'contact/index.html': contact, 'careers/index.html': careers, 'careers/thanks/index.html': careers_thanks, '404.html': notfound}
 
+OFFLINE_PAGE = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Halawi &amp; Partners</title>
+<link rel="icon" href="/assets/brand/favicon-32.png" sizes="32x32">
+<style>
+@font-face { font-family: 'Source Serif 4'; src: url('/assets/fonts/source-serif-4-var.woff2') format('woff2-variations'); font-weight: 200 900; font-display: swap; }
+html, body { height: 100%; margin: 0; }
+body { background: #0A1F3D; color: #FFFFFF; font-family: 'Source Serif 4', Cambria, Georgia, serif; display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; box-sizing: border-box;
+  background-image: linear-gradient(rgba(150,186,236,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(150,186,236,.1) 1px, transparent 1px); background-size: 48px 48px; }
+img { height: 64px; width: auto; display: block; margin: 0 auto 28px; }
+p { margin: 0; font-size: clamp(22px, 4vw, 32px); font-weight: 500; }
+</style>
+</head>
+<body>
+<main>
+<img src="/assets/brand/logo-white-128.png" alt="Halawi &amp; Partners">
+<p>Our website is temporarily offline.</p>
+</main>
+</body>
+</html>
+"""
+
+
+def build_offline():
+    """Publish only a holding page. Every other address returns 404, so search engines drop the old pages."""
+    for sub in ('brand', 'fonts'):
+        shutil.copytree(os.path.join(ROOT, 'static', 'assets', sub), os.path.join(SITE, 'assets', sub))
+    for name in ('index.html', '404.html'):
+        with open(os.path.join(SITE, name), 'w', encoding='utf-8') as fh:
+            fh.write(OFFLINE_PAGE)
+    with open(os.path.join(SITE, 'robots.txt'), 'w') as fh:
+        fh.write('User-agent: *\nAllow: /\n')
+    open(os.path.join(SITE, '.offline'), 'w').close()
+    print('built the offline holding page only')
+
+
 if __name__ == '__main__':
     if os.path.exists(SITE):
         shutil.rmtree(SITE)
+    if SETTINGS.get('site_offline'):
+        os.makedirs(SITE)
+        build_offline()
+        raise SystemExit(0)
     shutil.copytree(os.path.join(ROOT, 'static'), SITE)
     for d in ('steel-detailing', 'services', 'projects', 'insights', 'about', 'contact', 'careers', 'careers/thanks'):
         os.makedirs(os.path.join(SITE, d), exist_ok=True)
