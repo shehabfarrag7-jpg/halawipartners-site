@@ -134,7 +134,7 @@ collections:
           - { label: Sidon partner name, name: sidon_name, widget: string }
           - { label: Sidon partner title, name: sidon_role, widget: string }
           - { label: Sidon email, name: sidon_email, widget: string }
-          - { label: Sidon phone, name: sidon_phone, widget: string }
+          - { label: Sidon phone, name: sidon_phone, widget: string, required: false, hint: "Leave empty to hide it on the site" }
           - { label: Company LinkedIn page, name: linkedin_company, widget: string }
           - { label: CEO LinkedIn profile, name: linkedin_ceo, widget: string }
           - { label: Careers email, name: careers_email, widget: string, required: false, hint: "Shown on the Careers page for people who prefer to email their CV" }
