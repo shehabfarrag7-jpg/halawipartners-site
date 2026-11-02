@@ -19,7 +19,9 @@ def tel(p):
 
 SETTINGS = load('settings.json')
 LI_CO = SETTINGS['linkedin_company']
-LI_SF = SETTINGS['linkedin_ceo']
+LI_SF = SETTINGS.get('linkedin_ceo') or ''
+# A LinkedIn profile left empty in the settings is not shown on the site.
+LI_SF_LI = f'<li><a href="{LI_SF}" rel="noopener">LinkedIn profile</a></li>' if LI_SF else ''
 EMAIL_S, EMAIL_K = SETTINGS['cairo_email'], SETTINGS['sidon_email']
 PHONE_S, PHONE_K = SETTINGS['cairo_phone'], SETTINGS['sidon_phone']
 PHONE_S_RAW, PHONE_K_RAW = tel(PHONE_S), tel(PHONE_K)
@@ -75,7 +77,7 @@ ORG = {
     ],
     'founder': [
         {'@type': 'Person', 'name': NAME_K, 'jobTitle': ROLE_K, 'email': EMAIL_K, **({'telephone': PHONE_K_RAW} if PHONE_K_RAW else {})},
-        {'@type': 'Person', 'name': NAME_S.replace('Eng. ', ''), 'jobTitle': ROLE_S, 'email': EMAIL_S, **({'telephone': PHONE_S_RAW} if PHONE_S_RAW else {}), 'sameAs': [LI_SF]},
+        {'@type': 'Person', 'name': NAME_S.replace('Eng. ', ''), 'jobTitle': ROLE_S, 'email': EMAIL_S, **({'telephone': PHONE_S_RAW} if PHONE_S_RAW else {}), **({'sameAs': [LI_SF]} if LI_SF else {})},
     ],
     'knowsAbout': ['Steel detailing', 'Shop drawings', 'Erection drawings', '3D steel modeling', 'AISC 360', 'AISC 303 Code of Standard Practice', 'OSHA 1926 Subpart R', 'Structural engineering', 'Piping design', 'Pipe stress analysis', 'Caesar II', 'Static equipment design', 'Pressure vessel design', 'BIM coordination', 'Architectural design', 'MEP design', 'Fire-fighting systems'],
 }
@@ -676,7 +678,7 @@ def about():
     <div class="head"><h2>The partners</h2><p class="lede">Write to either partner directly.</p></div>
     <div class="people">
       <div class="person"><h3>{e(NAME_K)}</h3><p class="role">{e(ROLE_K)}, Sidon, Lebanon</p><ul><li><a href="mailto:{EMAIL_K}">{EMAIL_K}</a></li>{TEL_K_LI}</ul></div>
-      <div class="person"><h3>{e(NAME_S)}</h3><p class="role">{e(ROLE_S)}, Cairo, Egypt</p><ul><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li>{TEL_S_LI}<li><a href="{LI_SF}" rel="noopener">LinkedIn profile</a></li></ul></div>
+      <div class="person"><h3>{e(NAME_S)}</h3><p class="role">{e(ROLE_S)}, Cairo, Egypt</p><ul><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li>{TEL_S_LI}{LI_SF_LI}</ul></div>
     </div>
   </div>
 </section>
