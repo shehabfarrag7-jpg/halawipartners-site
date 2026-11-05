@@ -67,7 +67,7 @@ ORG = {
     'logo': DOMAIN + '/assets/brand/logo-navy-128.png',
     'image': DOMAIN + '/assets/brand/og-image.png',
     'description': 'Multidisciplinary engineering and architectural practice in Sidon, Lebanon and Cairo, Egypt: steel detailing for US fabricators, structural engineering, piping design, pipe stress analysis, static equipment, BIM coordination, and architectural and MEP design.',
-    'email': EMAIL_S,
+    'email': EMAIL_K,
     'foundingDate': '2023',
     'areaServed': ['United States', 'Middle East', 'Europe'],
     'sameAs': [LI_CO],
@@ -141,7 +141,7 @@ def footer(root):
       </div>
       <div>
         <h2>Cairo office</h2>
-        <ul><li>Cairo, Egypt</li><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li>{TEL_S_LI}</ul>
+        <ul><li>Cairo, Egypt</li>{TEL_S_LI}</ul>
       </div>
       <div>
         <h2>Pages</h2>
@@ -713,8 +713,7 @@ def contact():
       <h2 style="font-size:30px">What to send</h2>
       <ul class="ticks" style="margin-top:16px"><li>Contract drawings, PDF or DWG</li><li>Specifications and addenda</li><li>Your shop standards or a sample set</li><li>The schedule you are working to</li></ul>
       <h2 style="font-size:30px;margin-top:36px">Or write directly</h2>
-      <p style="margin-top:12px"><strong>Cairo office</strong><br><a href="mailto:{EMAIL_S}">{EMAIL_S}</a>{TEL_S_CONTACT}</p>
-      <p><strong>Sidon office</strong><br><a href="mailto:{EMAIL_K}">{EMAIL_K}</a>{TEL_K_CONTACT}</p>
+      <p style="margin-top:12px"><strong>Sidon office</strong><br><a href="mailto:{EMAIL_K}">{EMAIL_K}</a>{TEL_K_CONTACT}</p>
       <p><a href="{LI_CO}" rel="noopener">Halawi &amp; Partners on LinkedIn</a></p>
     </div>
   </div>
