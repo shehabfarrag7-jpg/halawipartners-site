@@ -836,7 +836,6 @@ def apply_band(cls, steps, mail):
       <aside>
         <h3 style="margin-bottom:14px">What happens next</h3>
         <ol class="steps-list">{steps_html}</ol>
-        <p class="note" style="margin-top:22px">Trouble with the form? Email your CV to <a href="{mail('Open application')}">{CAREERS_EMAIL}</a>.</p>
       </aside>
     </div>
   </div>
@@ -854,7 +853,7 @@ def apply_band(cls, steps, mail):
     if(!miss.length && !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(em.value.trim())){{ s.textContent='Enter an email address like name@company.com.'; em.focus(); return; }}
     if(miss.length){{ s.textContent='Please add '+miss.map(function(x){{ return x.getAttribute('data-name'); }}).join(', ')+'.'; miss[0].focus(); return; }}
     var total=0; [].slice.call(f.querySelectorAll('input[type=file]')).forEach(function(i){{ if(i.files[0]) total+=i.files[0].size; }});
-    if(total>10*1024*1024){{ s.textContent='The files are larger than 10 MB in total. Send a smaller PDF, or email them to {CAREERS_EMAIL}.'; return; }}
+    if(total>10*1024*1024){{ s.textContent='The files are larger than 10 MB in total. Please attach a smaller PDF.'; return; }}
     btn.disabled=true; btn.textContent='Sending...'; s.textContent='Uploading your application. This can take a few seconds.';
     function readFile(input){{ return new Promise(function(res,rej){{ var file=input && input.files[0]; if(!file) return res(null);
       var rd=new FileReader(); rd.onload=function(){{ res({{ name:file.name, type:file.type, data:String(rd.result).split(',')[1] }}); }}; rd.onerror=function(){{ rej(rd.error); }}; rd.readAsDataURL(file); }}); }}
@@ -868,7 +867,7 @@ def apply_band(cls, steps, mail):
       .then(function(r){{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }})
       .then(function(res){{ if(!res || !res.ok) throw new Error((res && res.error) || 'Not saved'); window.location.href='/careers/thanks/'; }})
       .catch(function(){{ btn.disabled=false; btn.textContent='Send application';
-        s.innerHTML='Your application could not be sent. Please try again, or email your CV to <a href="mailto:{CAREERS_EMAIL}?subject=Open%20application">{CAREERS_EMAIL}</a>.'; }});
+        s.textContent='Your application could not be sent. Please check your connection and try again in a few minutes.'; }});
   }});
   window.addEventListener('pageshow',function(){{ btn.disabled=false; btn.textContent='Send application'; }});
 }})();
