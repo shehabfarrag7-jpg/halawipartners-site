@@ -75,10 +75,6 @@ ORG = {
         {'@type': 'PostalAddress', 'addressLocality': 'Sidon', 'addressRegion': 'South Governorate', 'addressCountry': 'LB'},
         {'@type': 'PostalAddress', 'addressLocality': 'Cairo', 'addressRegion': 'Cairo Governorate', 'addressCountry': 'EG'},
     ],
-    'founder': [
-        {'@type': 'Person', 'name': NAME_K, 'jobTitle': ROLE_K, 'email': EMAIL_K, **({'telephone': PHONE_K_RAW} if PHONE_K_RAW else {})},
-        {'@type': 'Person', 'name': NAME_S.replace('Eng. ', ''), 'jobTitle': ROLE_S, 'email': EMAIL_S, **({'telephone': PHONE_S_RAW} if PHONE_S_RAW else {}), **({'sameAs': [LI_SF]} if LI_SF else {})},
-    ],
     'knowsAbout': ['Steel detailing', 'Shop drawings', 'Erection drawings', '3D steel modeling', 'AISC 360', 'AISC 303 Code of Standard Practice', 'OSHA 1926 Subpart R', 'Structural engineering', 'Piping design', 'Pipe stress analysis', 'Caesar II', 'Static equipment design', 'Pressure vessel design', 'BIM coordination', 'Architectural design', 'MEP design', 'Fire-fighting systems'],
 }
 
@@ -141,11 +137,11 @@ def footer(root):
       </div>
       <div>
         <h2>Sidon office</h2>
-        <ul><li>Sidon, Lebanon</li><li>{e(NAME_K)}, {e(ROLE_K)}</li><li><a href="mailto:{EMAIL_K}">{EMAIL_K}</a></li>{TEL_K_LI}</ul>
+        <ul><li>Sidon, Lebanon</li><li><a href="mailto:{EMAIL_K}">{EMAIL_K}</a></li>{TEL_K_LI}</ul>
       </div>
       <div>
         <h2>Cairo office</h2>
-        <ul><li>Cairo, Egypt</li><li>{e(NAME_S)}, {e(ROLE_S)}</li><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li>{TEL_S_LI}</ul>
+        <ul><li>Cairo, Egypt</li><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li>{TEL_S_LI}</ul>
       </div>
       <div>
         <h2>Pages</h2>
@@ -673,15 +669,6 @@ def about():
     </div>
   </div>
 </section>
-<section class="band ink">
-  <div class="wrap">
-    <div class="head"><h2>The partners</h2><p class="lede">Write to either partner directly.</p></div>
-    <div class="people">
-      <div class="person"><h3>{e(NAME_K)}</h3><p class="role">{e(ROLE_K)}, Sidon, Lebanon</p><ul><li><a href="mailto:{EMAIL_K}">{EMAIL_K}</a></li>{TEL_K_LI}</ul></div>
-      <div class="person"><h3>{e(NAME_S)}</h3><p class="role">{e(ROLE_S)}, Cairo, Egypt</p><ul><li><a href="mailto:{EMAIL_S}">{EMAIL_S}</a></li>{TEL_S_LI}{LI_SF_LI}</ul></div>
-    </div>
-  </div>
-</section>
 <section class="band alt">
   <div class="wrap">
     <div class="head"><h2>Clients</h2><p class="lede">Fabricators, contractors and owners in {COUNTRIES}.</p></div>
@@ -726,8 +713,8 @@ def contact():
       <h2 style="font-size:30px">What to send</h2>
       <ul class="ticks" style="margin-top:16px"><li>Contract drawings, PDF or DWG</li><li>Specifications and addenda</li><li>Your shop standards or a sample set</li><li>The schedule you are working to</li></ul>
       <h2 style="font-size:30px;margin-top:36px">Or write directly</h2>
-      <p style="margin-top:12px"><strong>{e(NAME_S)}</strong>, Cairo<br><a href="mailto:{EMAIL_S}">{EMAIL_S}</a>{TEL_S_CONTACT}</p>
-      <p><strong>{e(NAME_K)}</strong>, Sidon<br><a href="mailto:{EMAIL_K}">{EMAIL_K}</a>{TEL_K_CONTACT}</p>
+      <p style="margin-top:12px"><strong>Cairo office</strong><br><a href="mailto:{EMAIL_S}">{EMAIL_S}</a>{TEL_S_CONTACT}</p>
+      <p><strong>Sidon office</strong><br><a href="mailto:{EMAIL_K}">{EMAIL_K}</a>{TEL_K_CONTACT}</p>
       <p><a href="{LI_CO}" rel="noopener">Halawi &amp; Partners on LinkedIn</a></p>
     </div>
   </div>
